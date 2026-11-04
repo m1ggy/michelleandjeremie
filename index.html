@@ -124,7 +124,7 @@
     #envelope {
       position: fixed;
       inset: 0;
-      z-index: 100;
+      z-index: 5000;
       display: flex;
       flex-direction: column;
       align-items: center;
@@ -350,19 +350,30 @@
       background: var(--surface);
     }
     #area-map {
+      /* Own stacking context: keeps Leaflet's high z-index layers (400-1000)
+         from rising above the intro overlay and the sticky nav */
+      position: relative;
+      z-index: 0;
+      isolation: isolate;
       height: clamp(360px, 60vh, 540px);
       background: #e9e3d6;
       display: grid;
       place-items: center;
     }
     .map-fallback { color: var(--muted); padding: 1rem; }
+    #area-map .map-fade {
+      position: absolute;
+      inset: 0;
+      z-index: 450;
+      pointer-events: none;
+      box-shadow: inset 0 0 50px 30px #f6efe1;
+    }
+    @media (max-width: 600px) {
+      #area-map .map-fade { box-shadow: inset 0 0 22px 8px #f6efe1; }
+    }
     .map-note { margin: 1rem auto 1.5rem; font-size: 0.85rem; color: var(--muted); }
 
-    /* Recolor the grey basemap toward cream land and sage water */
-    #area-map .leaflet-tile-pane {
-      filter: url(#map-duotone);
-    }
-    #area-map .leaflet-container, #area-map.leaflet-container { font-family: var(--sans); background: #e9e3d6; }
+    #area-map .leaflet-container, #area-map.leaflet-container { font-family: var(--sans); background: #f6efe1; }
     .leaflet-control-zoom a {
       color: var(--olive) !important;
       background: var(--ivory) !important;
@@ -889,27 +900,11 @@
         <a class="btn" href="https://www.google.com/maps/search/?api=1&amp;query=Lily+Vacation+Farm+House%2C+Jalajala%2C+Rizal" target="_blank" rel="noopener">View map</a>
       </div>
 
-      <!-- Area map: Leaflet + Esri light-gray tiles, recolored to the site palette -->
+      <!-- Area map: Leaflet, drawn from OpenStreetMap data (js/map-data.js) in the site palette -->
       <div class="map-block">
         <p class="eyebrow">Finding us</p>
         <h3 class="map-title">Jalajala, by the shores of Laguna de Bay</h3>
         <div class="map-frame">
-          <!-- Duotone for the map tiles: light land -> cream, darker water -> sage -->
-          <svg width="0" height="0" style="position:absolute" aria-hidden="true" focusable="false">
-            <filter id="map-duotone" color-interpolation-filters="sRGB">
-              <feColorMatrix type="saturate" values="0"/>
-              <feComponentTransfer>
-                <feFuncR type="linear" slope="5" intercept="-3.7"/>
-                <feFuncG type="linear" slope="5" intercept="-3.7"/>
-                <feFuncB type="linear" slope="5" intercept="-3.7"/>
-              </feComponentTransfer>
-              <feComponentTransfer>
-                <feFuncR type="table" tableValues="0.565 0.988"/>
-                <feFuncG type="table" tableValues="0.604 0.961"/>
-                <feFuncB type="table" tableValues="0.514 0.918"/>
-              </feComponentTransfer>
-            </filter>
-          </svg>
           <div id="area-map" role="region" aria-label="Map of Jalajala, Rizal, with nearby towns and the venue marked">
             <p class="map-fallback">Lily Vacation Farmhouse &middot; Sitio Campanario, Pagkalinawan, Jalajala, Rizal</p>
           </div>
@@ -942,7 +937,7 @@
   <section id="stay">
     <div class="wrap">
       <h2>Accommodation</h2>
-      <p class="lede">For guests traveling from afar, we recommend booking the following hotels. Please plan your stay accordingly.</p>
+      <p class="lede">For guests traveling from afar, here are places to stay at and near the venue. Rooms are limited in Jalajala, so please book early and confirm rates directly with each resort.</p>
       <div class="cards">
         <div class="card">
           <p class="eyebrow">Stay at the venue</p>
@@ -951,14 +946,16 @@
           <a class="btn" href="https://www.google.com/maps/search/?api=1&amp;query=Lily+Vacation+Farm+House%2C+Jalajala%2C+Rizal" target="_blank" rel="noopener">View details</a>
         </div>
         <div class="card">
-          <h3 class="tbd">Hotel two</h3>
-          <p class="addr tbd">Address</p>
-          <a class="btn" href="#" target="_blank" rel="noopener">Book here</a>
+          <p class="eyebrow">Nearby &middot; Brgy. Lubo</p>
+          <h3>KabinA sa Aplaya</h3>
+          <p class="addr">RJFLn Resort &middot; Mabini St., Brgy. Lubo, Jalajala, Rizal<br>A-frame cabins and a pool overlooking Laguna de Bay</p>
+          <a class="btn" href="https://www.facebook.com/kabinasaaplaya/" target="_blank" rel="noopener">Book here</a>
         </div>
         <div class="card">
-          <h3 class="tbd">Hotel three</h3>
-          <p class="addr tbd">Address</p>
-          <a class="btn" href="#" target="_blank" rel="noopener">Book here</a>
+          <p class="eyebrow">Nearby &middot; Brgy. Lubo</p>
+          <h3>Paraiso Hills Resort</h3>
+          <p class="addr">Resort &amp; Venue Center &middot; Bonifacio St., Brgy. Lubo, Jalajala, Rizal<br>Quiet hillside resort a short drive from the venue</p>
+          <a class="btn" href="https://www.facebook.com/ParaisoHillsResort/" target="_blank" rel="noopener">Book here</a>
         </div>
       </div>
     </div>
@@ -1159,6 +1156,7 @@
   </script>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.css">
   <script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.js"></script>
+  <script src="js/map-data.js"></script>
   <script>
     // Area map. Coordinates from OpenStreetMap; the venue itself isn't on OSM,
     // so the pin sits on Sitio Campanario, Pagkalinawan.
@@ -1180,11 +1178,31 @@
       var narrow = el.clientWidth < 600;
       map.fitBounds(narrow ? [[14.28, 121.27], [14.49, 121.51]] : [[14.27, 121.17], [14.54, 121.50]], { padding: [10, 10] });
 
-      // Esri light-gray canvas: label-free and keyless, so our own labels stay clean
-      L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/Canvas/World_Light_Gray_Base/MapServer/tile/{z}/{y}/{x}', {
-        maxZoom: 16,
-        attribution: 'Tiles &copy; Esri &mdash; Esri, HERE, Garmin, &copy; OpenStreetMap contributors'
-      }).addTo(map);
+      // Map drawn from OpenStreetMap data in js/map-data.js: no base images,
+      // so no borders or grid lines, and local roads show at every zoom.
+      map.attributionControl.addAttribution('&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors');
+      var D = window.MAP_DATA;
+      if (D) {
+        var renderer = L.canvas({ padding: 0.5 });
+        L.polygon(D.lake, {
+          renderer: renderer, interactive: false,
+          stroke: true, color: '#8f977c', weight: 0.8,
+          fillColor: '#b9bea9', fillOpacity: 1
+        }).addTo(map);
+        var road = function (lines, color, weight, opacity) {
+          L.polyline(lines, { renderer: renderer, interactive: false, color: color, weight: weight, opacity: opacity, lineCap: 'round', lineJoin: 'round' }).addTo(map);
+        };
+        road(D.local, '#9aa288', 0.8, 0.7);
+        road(D.minor, '#8a9176', 1.2, 0.85);
+        road(D.major, '#ffffff', 3.4, 0.9);   // soft casing
+        road(D.major, '#6f7659', 1.8, 1);
+      }
+
+      // Keep the view inside the drawn area, and fade the edges so roads don't stop abruptly
+      map.setMinZoom(map.getZoom());
+      map.setMaxBounds([[14.22, 121.08], [14.62, 121.58]]);
+      var fade = L.DomUtil.create('div', 'map-fade', el);
+      fade.setAttribute('aria-hidden', 'true');
 
       // [name, lat, lng, label side: r/l/t/b, hide on small screens, label side on small screens]
       var towns = [
