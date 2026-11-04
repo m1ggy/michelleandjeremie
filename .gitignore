@@ -7,3 +7,6 @@ desktop.ini
 
 # Stand-in photos scraped from a Canva template (testing only, not ours to publish)
 images/test/
+
+# Raw planning material (deck, invitation card, screenshots); source only, not part of the site
+info/

@@ -9,10 +9,18 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <!-- Design ref: https://rhiweb.my.canva.site/wedding-website-20
        That site uses The Seasons (paid) for headings; Cormorant Garamond is the free stand-in. -->
-  <link href="https://fonts.googleapis.com/css2?family=Jost:ital,wght@0,300;0,400;0,500;1,400&family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;1,400&family=Pinyon+Script&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Jost:wght@300;400;500&family=Cormorant+Garamond:wght@400;500;600&display=swap" rel="stylesheet">
   <!-- Animations and the envelope only kick in when JS runs, so the page still works without it. -->
   <script>document.documentElement.classList.add('js');</script>
   <style>
+    /* GNU FreeSerif, unmodified from https://ftp.gnu.org/gnu/freefont/ (GPL with font exception; license notice is embedded in the file) */
+    @font-face {
+      font-family: "FreeSerif";
+      src: url("fonts/FreeSerif.woff") format("woff");
+      font-weight: 400;
+      font-display: swap;
+    }
+
     :root {
       /* Palette: https://rhiweb.my.canva.site/wedding-website-20 */
       --olive: #565c46;
@@ -31,7 +39,8 @@
       --line: var(--greige);
 
       --serif: "Cormorant Garamond", Georgia, serif;
-      --script: "Pinyon Script", cursive;
+      /* Display font: spaced serif capitals, matching the printed invitation */
+      --script: "FreeSerif", "Cormorant Garamond", "Times New Roman", serif;
       --sans: "Jost", "Helvetica Neue", Arial, sans-serif;
     }
 
@@ -63,11 +72,13 @@
     .script {
       font-family: var(--script);
       font-weight: 400;
-      line-height: 1.1;
+      line-height: 1.2;
+      text-transform: uppercase;
+      letter-spacing: 0.2em;
     }
 
     h2 {
-      font-family: var(--serif);
+      font-family: var(--script);
       font-weight: 500;
       font-size: clamp(2.25rem, 6vw, 3.25rem);
       letter-spacing: 0.04em;
@@ -131,19 +142,7 @@
     #envelope > :nth-child(2) { animation-delay: 0.2s; }
     #envelope > :nth-child(3) { animation-delay: 0.4s; }
     #envelope > :nth-child(4) { animation-delay: 0.6s; }
-    #envelope .script { font-size: clamp(3.5rem, 14vw, 6rem); }
-    #envelope .seal {
-      width: 84px; height: 84px;
-      border-radius: 50%;
-      display: grid; place-items: center;
-      background: var(--peach);
-      color: var(--olive-deep);
-      font-family: var(--serif);
-      font-size: 1.6rem;
-      font-weight: 600;
-      letter-spacing: 0.05em;
-      animation: fadeUp 1s 0.4s cubic-bezier(.2,.7,.2,1) both, breathe 3.5s 1.4s ease-in-out infinite;
-    }
+    #envelope .script { font-size: clamp(1.9rem, 7vw, 3.25rem); }
 
     /* ---------- Nav ---------- */
     nav {
@@ -178,22 +177,40 @@
       display: flex;
       flex-direction: column;
       align-items: center;
-      justify-content: center;
+      justify-content: flex-start;
       text-align: center;
-      padding: 4rem 1rem;
+      padding: clamp(5rem, 13vh, 8rem) 1rem 4rem;
       background: var(--olive-deep);
       color: var(--ivory);
     }
     .hero-bg {
       position: absolute;
       inset: 0;
-      /* Wide shot: couple small in the field, lots of room for the names */
-      background: url("images/svMNil1Q.jpg") center 60% / cover no-repeat;
-      animation: kenburns 24s ease-out both;
+      /* Original wide field shot, zoomed 1.6x on the couple via background-size
+         (drawn at full quality, no stretching). Anchored to the bottom edge because
+         the couple stands low in the photo; names sit up top over the trees.
+         Sizes below = "cover" x 1.6, picked by screen shape. */
+      background: url("images/svMNil1Q.jpg") 51% 100% / 160% auto no-repeat;
+    }
+    @media (max-aspect-ratio: 3/2) {
+      /* Screens narrower than the photo: cover is set by height */
+      .hero-bg { background-size: auto 160%; }
     }
     @media (max-aspect-ratio: 4/5) {
-      /* Portrait screens get the vertical version of the same scene */
-      .hero-bg { background-image: url("images/LDNf_rVU.jpg"); background-position: center 70%; }
+      /* Portrait screens: vertical version of the same scene, zoomed the same way */
+      .hero-bg {
+        background-image: url("images/LDNf_rVU.jpg");
+        background-position: 48.5% 100%;
+        background-size: auto 160%;
+      }
+      /* Phones: smaller, higher names so they clear the couple's heads */
+      .hero { padding-top: 3.5rem; }
+      .hero .script { font-size: clamp(1.5rem, 6.8vw, 2.2rem); }
+      .hero .date { margin-top: 1rem; font-size: 1.5rem; }
+    }
+    @media (max-aspect-ratio: 4/5) and (min-aspect-ratio: 2/3) {
+      /* Portrait screens wider than the vertical photo: cover is set by width */
+      .hero-bg { background-size: 160% auto; }
     }
 
     /* Arched portrait in the invitation */
@@ -206,7 +223,13 @@
       outline: 1px solid rgba(255, 250, 243, 0.4);
       outline-offset: 8px;
     }
-    .arch img { width: 100%; height: 100%; object-fit: cover; object-position: center 30%; }
+    .arch img {
+      width: 100%; height: 100%;
+      object-fit: cover; object-position: center 70%;
+      /* Zoom to the couple: head to hips */
+      scale: 1.7;
+      transform-origin: 52% 55%;
+    }
 
     /* Full-width photo break between sections */
     .photo-band { height: clamp(320px, 70vh, 680px); overflow: hidden; }
@@ -215,23 +238,25 @@
       content: "";
       position: absolute;
       inset: 0;
-      background: linear-gradient(180deg, rgba(50,55,39,0.25) 0%, rgba(50,55,39,0.55) 100%);
+      /* Dark at top so the names read, light lower down so the couple stays clear */
+      background: linear-gradient(180deg, rgba(50,55,39,0.6) 0%, rgba(50,55,39,0.2) 50%, rgba(50,55,39,0.1) 75%, rgba(50,55,39,0.35) 100%);
     }
-    .hero > :not(.hero-bg) { position: relative; z-index: 1; }
+    .hero > :not(.hero-bg) { position: relative; z-index: 2; }
     .hero .eyebrow { color: var(--greige); }
     .hero .tbd { color: var(--peach); }
+    /* Names stacked like the invitation: JEREMIE / & / MICHELLE */
     .hero .script {
-      font-size: clamp(4.5rem, 18vw, 9rem);
-      color: var(--ivory);
-      text-shadow: 0 2px 24px rgba(50,55,39,0.35);
+      font-size: clamp(1.5rem, 6.8vw, 3.2rem);
+      letter-spacing: 0.25em;
+      line-height: 1.25;
+      margin-right: -0.25em; /* offset trailing letter-spacing so lines stay centered */
+      color: var(--greige);
+      text-shadow: 0 2px 24px rgba(50,55,39,0.45);
     }
     .hero .and {
       display: block;
-      font-family: var(--serif);
-      font-style: italic;
-      font-size: clamp(1.5rem, 4vw, 2rem);
-      color: var(--peach);
-      margin: 0.25rem 0;
+      font-size: 0.85em;
+      margin: 0.1em 0;
     }
     .hero .date {
       margin-top: 2rem;
@@ -240,6 +265,11 @@
       letter-spacing: 0.3em;
     }
     .hero .place { margin-top: 0.5rem; }
+    /* Wide screens: names on one line so they stay above the couple */
+    @media (min-width: 700px) {
+      .hero .script { font-size: clamp(2rem, 3.6vw, 3.2rem); }
+      .hero .date { margin-top: 1rem; }
+    }
 
     /* ---------- Sections ---------- */
     section {
@@ -263,7 +293,7 @@
     }
 
     /* Invitation */
-    .invite .script { font-size: clamp(3rem, 10vw, 4.5rem); }
+    .invite .script { font-size: clamp(2rem, 6vw, 3rem); }
     .invite .names {
       font-family: var(--serif);
       font-size: clamp(2rem, 6vw, 3rem);
@@ -308,13 +338,23 @@
     .role { margin-top: 3.5rem; }
     .role .why {
       font-family: var(--serif);
-      font-style: italic;
       font-size: 1.2rem;
       color: var(--muted);
       margin: 0.25rem 0 1rem;
     }
     .role ul { list-style: none; }
-    .role li { padding: 0.1rem 0; }
+    .role h3 {
+      font-family: var(--script);
+      font-weight: 400;
+      font-size: 1.05rem;
+      letter-spacing: 0.18em;
+      margin-bottom: 0.5rem;
+    }
+    .role li {
+      padding: 0.1rem 0;
+      font-family: var(--serif);
+      font-size: 1.35rem;
+    }
     .cols {
       display: grid;
       grid-template-columns: 1fr 1fr;
@@ -404,6 +444,7 @@
       font-family: var(--serif);
       font-size: 1.6rem;
     }
+    .timeline small { display: block; font-size: 0.9rem; color: var(--muted); }
 
     /* Attire */
     .swatches {
@@ -499,10 +540,10 @@
         url("images/ec3GQGKa.jpg") center 55% / cover no-repeat var(--olive-deep);
       color: var(--greige);
     }
-    footer .script { font-size: 3rem; color: var(--ivory); }
+    footer .script { font-size: 2rem; color: var(--ivory); }
 
     /* Placeholder text still to fill in */
-    .tbd { color: var(--sage); font-style: italic; }
+    .tbd { color: var(--sage); }
     .band-olive .tbd { color: var(--peach); }
 
     /* ---------- Animations ---------- */
@@ -563,7 +604,6 @@
   <div id="envelope" role="dialog" aria-label="Invitation">
     <p class="eyebrow" style="color: var(--greige)">Jeremie &amp; Michelle</p>
     <p class="script">You are invited!</p>
-    <div class="seal" aria-hidden="true">J&amp;M</div>
     <button class="btn light" id="open-invite">Tap to open</button>
   </div>
 
@@ -579,30 +619,29 @@
 
   <!-- 2. Hero -->
   <header class="hero">
-    <div class="hero-bg" aria-hidden="true"></div>
-    <p class="eyebrow hero-in" style="--d: 0.2s">We're getting married</p>
-    <h1 class="script hero-in" style="--d: 0.45s">Jeremie<span class="and">and</span>Michelle</h1>
-    <p class="date hero-in" style="--d: 0.8s"><span class="tbd">MM . DD . YY</span></p>
-    <p class="eyebrow place hero-in" style="--d: 1s"><span class="tbd">City, Province</span></p>
+    <div class="hero-bg" aria-hidden="true"></div>    <p class="eyebrow hero-in" style="--d: 0.2s">We're getting married</p>
+    <h1 class="script hero-in" style="--d: 0.45s">Jeremie<span class="and">&amp;</span>Michelle</h1>
+    <p class="date hero-in" style="--d: 0.8s">02 . 20 . 27</p>
+    <p class="eyebrow place hero-in" style="--d: 1s">Jalajala, Rizal</p>
   </header>
 
   <!-- 3. Save the date / invitation -->
   <section id="invitation" class="band-olive invite">
     <div class="narrow">
-      <div class="arch"><img src="images/AkBC0i4j.jpg" alt="Jeremie and Michelle embracing in a field" loading="lazy"></div>
+      <div class="arch"><img src="images/2lh4lxid.jpg" alt="Michelle resting her head on Jeremie's shoulder" loading="lazy"></div>
       <p class="eyebrow">Save the date</p>
       <p class="lede">Together with their families,<br>we invite you to join the wedding of</p>
       <p class="names">Jeremie + Michelle</p>
       <div class="divider"></div>
-      <p class="when">On <span class="tbd">Weekday</span>, the <span class="tbd">Nth</span> of <span class="tbd">Month Year</span><br><span class="tbd">Time</span> in the afternoon</p>
+      <p class="when">On Saturday, the 20th of February 2027<br>4:30 in the afternoon</p>
       <div class="pair">
         <div>
           <p class="eyebrow label">Ceremony</p>
-          <p class="tbd">Ceremony venue</p>
+          <p>Lily Vacation Farmhouse</p>
         </div>
         <div>
           <p class="eyebrow label">Reception</p>
-          <p class="tbd">Reception venue</p>
+          <p>Lily Vacation Farmhouse</p>
         </div>
       </div>
     </div>
@@ -610,9 +649,9 @@
 
   <!-- 4. Countdown -->
   <section id="countdown">
-    <p class="script" style="font-size: clamp(2.5rem, 8vw, 3.5rem); color: var(--olive)">We're getting married in&hellip;</p>
-    <!-- Set data-date to the ceremony start, e.g. 2027-06-12T14:00:00 -->
-    <div class="countdown" data-date="">
+    <p class="script" style="font-size: clamp(1.4rem, 5vw, 2.2rem); color: var(--olive)">We're getting married in&hellip;</p>
+    <!-- Ceremony start, Philippine time -->
+    <div class="countdown" data-date="2027-02-20T16:30:00+08:00">
       <div><strong data-unit="days">&ndash;</strong><span>Days</span></div>
       <div><strong data-unit="hours">&ndash;</strong><span>Hours</span></div>
       <div><strong data-unit="minutes">&ndash;</strong><span>Minutes</span></div>
@@ -624,7 +663,7 @@
       <figure><img src="images/T2LSJY-p.jpg" alt="Michelle laughing beside Jeremie" loading="lazy"></figure>
       <figure><img src="images/_q8VT-Jp.jpg" alt="Jeremie and Michelle looking at each other" loading="lazy"></figure>
       <figure><img src="images/gLduw9Sn.jpg" alt="Jeremie and Michelle walking hand in hand" loading="lazy"></figure>
-      <figure><img src="images/2lh4lxid.jpg" alt="Michelle resting her head on Jeremie's shoulder" loading="lazy"></figure>
+      <figure><img src="images/AkBC0i4j.jpg" alt="Jeremie and Michelle embracing in a field" loading="lazy"></figure>
       <figure><img src="images/EcdhoMq2.jpg" alt="Jeremie and Michelle walking together" loading="lazy"></figure>
     </div>
   </section>
@@ -633,90 +672,64 @@
   <section id="entourage" class="band-greige">
     <div class="wrap">
       <h2>Entourage</h2>
-      <p class="eyebrow" style="margin-top: 0.75rem"><span class="tbd">Groom surname</span> &ndash; <span class="tbd">Bride surname</span></p>
+      <p class="eyebrow" style="margin-top: 0.75rem">Saturay &ndash; Garrote</p>
 
       <div class="role">
-        <h3>Our Parents</h3>
+        <h3>Parents of the Couple</h3>
         <p class="why">With love and the blessing of our beloved parents</p>
-        <div class="cols">
-          <div>
-            <p class="eyebrow">Parents of the Groom</p>
-            <ul><li class="tbd">Father's name</li><li class="tbd">Mother's name</li></ul>
-          </div>
-          <div>
-            <p class="eyebrow">Parents of the Bride</p>
-            <ul><li class="tbd">Father's name</li><li class="tbd">Mother's name</li></ul>
-          </div>
-        </div>
+        <ul>
+          <li>Gerry Saturay &amp; Erlen Saturay</li>
+          <li>Imelda Garrote &amp; Zenaida Paderanga</li>
+        </ul>
       </div>
 
       <div class="role">
         <h3>Principal Sponsors</h3>
         <p class="why">To guide and support us with wisdom and love</p>
-        <div class="cols">
-          <ul><li class="tbd">Mr. Name</li><li class="tbd">Mr. Name</li><li class="tbd">Mr. Name</li></ul>
-          <ul><li class="tbd">Mrs. Name</li><li class="tbd">Mrs. Name</li><li class="tbd">Mrs. Name</li></ul>
-        </div>
+        <ul>
+          <li>Loryen Sawit &amp; Cherwin Sawit</li>
+          <li>Kristine Castillo</li>
+          <li>Genelyn Saturay</li>
+          <li>Joy Francisco</li>
+        </ul>
       </div>
 
       <div class="role">
-        <h3>Secondary Sponsors</h3>
-        <div class="trio" style="margin-top: 1.5rem">
-          <div>
-            <p class="eyebrow">Candle</p>
-            <p class="why">To light our path as we begin our forever</p>
-            <ul><li class="tbd">Name</li><li class="tbd">Name</li></ul>
-          </div>
-          <div>
-            <p class="eyebrow">Veil</p>
-            <p class="why">To clothe us in unity, protection, and devotion</p>
-            <ul><li class="tbd">Name</li><li class="tbd">Name</li></ul>
-          </div>
-          <div>
-            <p class="eyebrow">Cord</p>
-            <p class="why">To bind us together in love and faithfulness</p>
-            <ul><li class="tbd">Name</li><li class="tbd">Name</li></ul>
-          </div>
-        </div>
-      </div>
-
-      <div class="role">
-        <h3>Best Man &amp; Maid of Honor</h3>
         <p class="why">To stand as our closest witnesses and steadfast support</p>
         <div class="cols">
-          <div><p class="eyebrow">Best Man</p><ul><li class="tbd">Name</li></ul></div>
-          <div><p class="eyebrow">Maid of Honor</p><ul><li class="tbd">Name</li></ul></div>
+          <div><h3>Best Man</h3><ul><li>Miguel Buising</li></ul></div>
+          <div><h3>Maid of Honor</h3><ul><li>Eillen Padranga</li></ul></div>
         </div>
       </div>
 
       <div class="role">
-        <h3>Groomsmen &amp; Bridesmaids</h3>
         <p class="why">To walk with us in joy, friendship, and celebration</p>
         <div class="cols">
-          <div><p class="eyebrow">Groomsmen</p><ul><li class="tbd">Name</li><li class="tbd">Name</li><li class="tbd">Name</li></ul></div>
-          <div><p class="eyebrow">Bridesmaids</p><ul><li class="tbd">Name</li><li class="tbd">Name</li><li class="tbd">Name</li></ul></div>
+          <div>
+            <h3>Groomsmen</h3>
+            <ul><li>Justin Bahilango</li><li>John Lloyd Saturay</li></ul>
+            <h3 style="margin-top: 2rem">Groomsmaids</h3>
+            <ul><li>Genelyn Saturay</li><li>Audrey Buising</li></ul>
+          </div>
+          <div>
+            <h3>Bridesmaids</h3>
+            <ul>
+              <li>Lovely Hsam Salonga</li>
+              <li>Jennifer Ganud</li>
+              <li>Kady Anne Estudillo</li>
+              <li>Eden Paderanga</li>
+              <li>Jam Clave</li>
+              <li>Veronica Ellarez</li>
+              <li>Dessa Marie Rebutiaco</li>
+              <li>Kimberly Damot</li>
+            </ul>
+          </div>
         </div>
       </div>
 
       <div class="role">
-        <h3>Bearers</h3>
-        <div class="trio" style="margin-top: 1.5rem">
-          <div>
-            <p class="eyebrow">Ring Bearer</p>
-            <p class="why">To carry the symbol of our love</p>
-            <ul><li class="tbd">Name</li></ul>
-          </div>
-          <div>
-            <p class="eyebrow">Bible Bearer</p>
-            <p class="why">To carry the symbol of our faith</p>
-            <ul><li class="tbd">Name</li></ul>
-          </div>
-          <div>
-            <p class="eyebrow">Coin Bearer</p>
-            <p class="why">To carry the symbol of our treasure</p>
-            <ul><li class="tbd">Name</li></ul>
-          </div>
-        </div>
+        <h3>Officiating Pastor</h3>
+        <ul><li>Leovic Pablo</li></ul>
       </div>
     </div>
   </section>
@@ -731,18 +744,18 @@
       <h2>Venues</h2>
       <div class="cards">
         <div class="card has-img">
-          <div class="card-img"><img src="images/test/venue-hall.jpg" alt="" loading="lazy"></div>
-          <p class="eyebrow">The Ceremony</p>
-          <h3 class="tbd">Ceremony venue</h3>
-          <p class="addr tbd">Street, City, Province</p>
-          <a class="btn" href="#" target="_blank" rel="noopener">View map</a>
+          <div class="card-img"><img src="images/venue/grounds.jpg" alt="Tree-shaded lawn at Lily Vacation Farmhouse" loading="lazy"></div>
+          <p class="eyebrow">The Ceremony &middot; 4:30 PM</p>
+          <h3>Lily Vacation Farmhouse</h3>
+          <p class="addr">0060 Companario Street, Sitio Campanario, Pagkalinawan, Jalajala, Rizal</p>
+          <a class="btn" href="https://www.google.com/maps/search/?api=1&amp;query=Lily+Vacation+Farm+House%2C+Jalajala%2C+Rizal" target="_blank" rel="noopener">View map</a>
         </div>
         <div class="card has-img">
-          <div class="card-img"><img src="images/test/venue-table.jpg" alt="" loading="lazy"></div>
-          <p class="eyebrow">The Reception</p>
-          <h3 class="tbd">Reception venue</h3>
-          <p class="addr tbd">Street, City, Province</p>
-          <a class="btn" href="#" target="_blank" rel="noopener">View map</a>
+          <div class="card-img"><img src="images/venue/farmhouse.jpg" alt="The farmhouse under large acacia trees" loading="lazy"></div>
+          <p class="eyebrow">The Reception &middot; 6:30 PM</p>
+          <h3>Lily Vacation Farmhouse</h3>
+          <p class="addr">0060 Companario Street, Sitio Campanario, Pagkalinawan, Jalajala, Rizal</p>
+          <a class="btn" href="https://www.google.com/maps/search/?api=1&amp;query=Lily+Vacation+Farm+House%2C+Jalajala%2C+Rizal" target="_blank" rel="noopener">View map</a>
         </div>
       </div>
     </div>
@@ -753,16 +766,16 @@
     <div class="narrow">
       <h2>Timeline</h2>
       <ol class="timeline">
-        <li><time class="tbd">1:00 PM</time><span>Arrival</span></li>
-        <li><time class="tbd">1:30 PM</time><span>Processional</span></li>
-        <li><time class="tbd">2:00 PM</time><span>Ceremony</span></li>
-        <li><time class="tbd">4:00 PM</time><span>Cocktails</span></li>
-        <li><time class="tbd">5:00 PM</time><span>Reception</span></li>
+        <li><time class="tbd">Arrival time</time><span>Arrival</span></li>
+        <li><time>4:30 PM</time><span>Ceremony</span></li>
+        <li><time>5:30 PM</time><span>Cocktail Hour</span></li>
+        <li><time>6:30 PM</time><span>Reception</span><br><small>Grand entrance, first dance, speeches &amp; cake cutting</small></li>
+        <li><time>8:30 PM</time><span>Program ends</span></li>
       </ol>
 
       <div class="divider" style="margin-top: 4rem"></div>
-      <p class="script" style="font-size: 2.75rem; color: var(--olive)">Plan your arrival</p>
-      <p class="lede">To ensure a smooth flow of the ceremony, we kindly ask our guests to arrive at <span class="tbd">1:00 PM</span> as we begin the ceremony at <span class="tbd">2:00 PM</span>. We respectfully request your punctual presence for this special moment.</p>
+      <p class="script" style="font-size: 1.75rem; color: var(--olive)">Plan your arrival</p>
+      <p class="lede">To ensure a smooth flow of the ceremony, we kindly ask our guests to arrive at <span class="tbd">arrival time</span> as we begin the ceremony at 4:30 PM. We respectfully request your punctual presence for this special moment.</p>
     </div>
   </section>
 
@@ -773,9 +786,10 @@
       <p class="lede">For guests traveling from afar, we recommend booking the following hotels. Please plan your stay accordingly.</p>
       <div class="cards">
         <div class="card">
-          <h3 class="tbd">Hotel one</h3>
-          <p class="addr tbd">Address</p>
-          <a class="btn" href="#" target="_blank" rel="noopener">Book here</a>
+          <p class="eyebrow">Stay at the venue</p>
+          <h3>Lily Vacation Farm House</h3>
+          <p class="addr">Jalajala, Rizal<br>Check-in 2:00 PM &middot; Check-out 11:00 AM</p>
+          <a class="btn" href="https://www.google.com/maps/search/?api=1&amp;query=Lily+Vacation+Farm+House%2C+Jalajala%2C+Rizal" target="_blank" rel="noopener">View details</a>
         </div>
         <div class="card">
           <h3 class="tbd">Hotel two</h3>
@@ -795,7 +809,7 @@
   <section id="attire" class="band-greige">
     <div class="narrow">
       <h2>Attire Guide</h2>
-      <p class="lede">Our colors</p>
+      <p class="lede">Our theme is Earthy Elegance: soft sages through deep olive greens.</p>
       <div class="swatches" aria-label="Wedding colors: sage, olive, deep olive, greige, cream">
         <i style="background: var(--sage)"></i>
         <i style="background: var(--olive)"></i>
@@ -834,21 +848,21 @@
   <!-- 12. FAQs -->
   <section id="faqs">
     <div class="narrow">
-      <p class="script" style="font-size: 2.5rem; color: var(--sage)">In case you're wondering&hellip;</p>
+      <p class="script" style="font-size: 1.6rem; color: var(--sage)">In case you're wondering&hellip;</p>
       <h2>FAQs</h2>
       <div class="faq">
         <details>
           <summary>What time should I arrive?</summary>
-          <p>We would love for you to arrive and be comfortably seated at <span class="tbd">ceremony venue</span> by <span class="tbd">1:00 PM</span>, as the ceremony will begin promptly at <span class="tbd">2:00 PM</span>.</p>
+          <p>We would love for you to arrive and be comfortably seated at Lily Vacation Farmhouse by <span class="tbd">arrival time</span>, as the ceremony will begin promptly at 4:30 PM.</p>
           <p>We'd appreciate it if you could join us at the ceremony, not just at the reception. It's the most important part of our wedding, and sharing that moment with you would mean so much.</p>
         </details>
         <details>
           <summary>Where are the ceremony and the reception taking place?</summary>
-          <p>The ceremony will be held at <span class="tbd">ceremony venue</span>, followed by a reception at <span class="tbd">reception venue</span>.</p>
+          <p>Both the ceremony and the reception will be held at Lily Vacation Farmhouse, 0060 Companario Street, Sitio Campanario, Pagkalinawan, Jalajala, Rizal. See the <a href="#venues">venue map</a> above.</p>
         </details>
         <details>
           <summary>What happens after the ceremony?</summary>
-          <p>Feel free to head straight to the reception venue and enjoy a delightful cocktail hour at <span class="tbd">reception venue</span>.</p>
+          <p>Stay with us on the farmhouse grounds for cocktail hour from 5:30 PM. The reception begins at 6:30 PM.</p>
         </details>
         <details>
           <summary>Is there a dress code?</summary>
@@ -868,7 +882,7 @@
         </details>
         <details>
           <summary>Until what time is the program?</summary>
-          <p>The reception program will wrap up around <span class="tbd">9:00 PM</span>, but the celebration doesn't have to end there! Join us for an after-party filled with drinks, music, and dancing.</p>
+          <p>The reception program will wrap up around 8:30 PM.</p>
         </details>
         <details>
           <summary>How can I contribute to the celebration?</summary>
@@ -889,7 +903,7 @@
   <!-- 13. RSVP -->
   <section id="rsvp" class="band-ivory">
     <div class="narrow">
-      <p class="script" style="font-size: 2.75rem; color: var(--sage)">Kindly</p>
+      <p class="script" style="font-size: 1.75rem; color: var(--sage)">Kindly</p>
       <h2>RSVP</h2>
       <p class="lede">We have reserved a special seat for you, and we hope to share this beautiful moment with you. Please let us know if you'll be there as we say &ldquo;I do&rdquo; by confirming your attendance on or before</p>
       <p class="deadline tbd">Deadline date (weekday)</p>
