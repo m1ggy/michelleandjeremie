@@ -1,0 +1,9 @@
+# OS / editor clutter
+.DS_Store
+Thumbs.db
+desktop.ini
+.vscode/
+.idea/
+
+# Stand-in photos scraped from a Canva template (testing only, not ours to publish)
+images/test/
