@@ -315,6 +315,7 @@
       margin-top: 2.5rem;
     }
     .pair .label { margin-bottom: 0.25rem; }
+    .pair.single { grid-template-columns: 1fr; }
     .pair p:last-child { font-family: var(--serif); font-size: 1.3rem; }
 
     /* Countdown */
@@ -333,6 +334,129 @@
       line-height: 1;
     }
     .countdown span { font-size: 0.7rem; letter-spacing: 0.2em; text-transform: uppercase; }
+
+    /* Area map */
+    .map-block { margin-top: 4.5rem; }
+    .map-title {
+      font-family: var(--script);
+      font-weight: 400;
+      font-size: clamp(1.1rem, 3.5vw, 1.5rem);
+      letter-spacing: 0.14em;
+      margin: 0.5rem 0 1.75rem;
+    }
+    .map-frame {
+      padding: 10px;
+      border: 1px solid var(--line);
+      background: var(--surface);
+    }
+    #area-map {
+      height: clamp(360px, 60vh, 540px);
+      background: #e9e3d6;
+      display: grid;
+      place-items: center;
+    }
+    .map-fallback { color: var(--muted); padding: 1rem; }
+    .map-note { margin: 1rem auto 1.5rem; font-size: 0.85rem; color: var(--muted); }
+
+    /* Recolor the grey basemap toward cream land and sage water */
+    #area-map .leaflet-tile-pane {
+      filter: url(#map-duotone);
+    }
+    #area-map .leaflet-container, #area-map.leaflet-container { font-family: var(--sans); background: #e9e3d6; }
+    .leaflet-control-zoom a {
+      color: var(--olive) !important;
+      background: var(--ivory) !important;
+      border-color: var(--line) !important;
+    }
+    .leaflet-bar { border: 1px solid var(--line) !important; box-shadow: none !important; border-radius: 0 !important; }
+    .leaflet-bar a { border-radius: 0 !important; }
+    .leaflet-control-attribution {
+      background: rgba(255, 250, 243, 0.8) !important;
+      color: var(--muted) !important;
+      font-size: 10px !important;
+    }
+    .leaflet-control-attribution a { color: var(--olive) !important; }
+
+    /* Town labels */
+    .town-label { background: none; border: none; }
+    .town-label span {
+      position: absolute;
+      white-space: nowrap;
+      font-family: var(--sans);
+      font-size: 10.5px;
+      letter-spacing: 0.22em;
+      text-transform: uppercase;
+      color: var(--olive);
+      text-shadow: 0 0 3px var(--cream), 0 0 3px var(--cream), 0 0 6px var(--cream);
+    }
+    .town-label i {
+      position: absolute;
+      left: -3px; top: -3px;
+      width: 6px; height: 6px;
+      border-radius: 50%;
+      background: var(--sage);
+    }
+    .town-label .r { left: 8px; top: -8px; }
+    .town-label .l { right: 8px; top: -8px; }
+    .town-label .t { left: 0; bottom: 7px; transform: translateX(-50%); }
+    .town-label .b { left: 0; top: 6px; transform: translateX(-50%); }
+    .water-label span {
+      position: absolute;
+      transform: translate(-50%, -50%);
+      white-space: nowrap;
+      font-family: var(--script);
+      font-size: 13px;
+      letter-spacing: 0.4em;
+      text-transform: uppercase;
+      color: rgba(86, 92, 70, 0.6);
+    }
+
+    /* Venue pin */
+    .venue-pin { background: none; border: none; }
+    .venue-pin .dot {
+      position: absolute;
+      left: -9px; top: -9px;
+      width: 18px; height: 18px;
+      border-radius: 50%;
+      background: var(--olive-deep);
+      border: 3px solid var(--ivory);
+      box-shadow: 0 2px 8px rgba(50, 55, 39, 0.35);
+    }
+    .venue-pin .ring {
+      position: absolute;
+      left: -22px; top: -22px;
+      width: 44px; height: 44px;
+      border-radius: 50%;
+      border: 1px solid var(--olive);
+      animation: pinPulse 2.4s ease-out infinite;
+    }
+    @keyframes pinPulse {
+      from { transform: scale(0.4); opacity: 0.9; }
+      to   { transform: scale(1.4); opacity: 0; }
+    }
+    .venue-pin .tag {
+      position: absolute;
+      left: 0; top: 18px;
+      transform: translateX(-50%);
+      white-space: nowrap;
+      padding: 0.45rem 0.8rem;
+      background: var(--olive);
+      color: var(--ivory);
+      font-family: var(--script);
+      font-size: 12px;
+      letter-spacing: 0.16em;
+      text-transform: uppercase;
+      box-shadow: 0 4px 14px rgba(50, 55, 39, 0.25);
+    }
+    .venue-pin .tag::after {
+      content: "";
+      position: absolute;
+      left: 50%; top: -5px;
+      margin-left: -5px;
+      border: 5px solid transparent;
+      border-top: 0;
+      border-bottom-color: var(--olive);
+    }
 
     /* Entourage */
     .role { margin-top: 3.5rem; }
@@ -401,6 +525,21 @@
       transition: transform 1.4s cubic-bezier(.2,.7,.2,1);
     }
     .card:hover .card-img img { transform: scale(1.05); }
+
+    /* Single venue card: two photos side by side */
+    .venue-card { max-width: 760px; margin: 3rem auto 0; }
+    .venue-photos {
+      display: grid;
+      grid-template-columns: 3fr 2fr;
+      gap: 6px;
+      aspect-ratio: 16 / 7;
+    }
+    .venue-photos img { min-width: 0; }
+    .venue-note { max-width: 440px; font-size: 0.95rem; color: var(--muted); }
+    @media (max-width: 560px) {
+      .venue-photos { grid-template-columns: 1fr; aspect-ratio: 4 / 3; }
+      .venue-photos img + img { display: none; }
+    }
 
     /* Gallery */
     .gallery {
@@ -610,7 +749,7 @@
   <nav>
     <a href="#invitation">Invitation</a>
     <a href="#entourage">Entourage</a>
-    <a href="#venues">Venues</a>
+    <a href="#venues">Venue</a>
     <a href="#timeline">Timeline</a>
     <a href="#attire">Attire</a>
     <a href="#faqs">FAQs</a>
@@ -634,13 +773,9 @@
       <p class="names">Jeremie + Michelle</p>
       <div class="divider"></div>
       <p class="when">On Saturday, the 20th of February 2027<br>4:30 in the afternoon</p>
-      <div class="pair">
+      <div class="pair single">
         <div>
-          <p class="eyebrow label">Ceremony</p>
-          <p>Lily Vacation Farmhouse</p>
-        </div>
-        <div>
-          <p class="eyebrow label">Reception</p>
+          <p class="eyebrow label">Ceremony &amp; Reception</p>
           <p>Lily Vacation Farmhouse</p>
         </div>
       </div>
@@ -741,22 +876,46 @@
   <!-- 6. Venues -->
   <section id="venues">
     <div class="wrap">
-      <h2>Venues</h2>
-      <div class="cards">
-        <div class="card has-img">
-          <div class="card-img"><img src="images/venue/grounds.jpg" alt="Tree-shaded lawn at Lily Vacation Farmhouse" loading="lazy"></div>
-          <p class="eyebrow">The Ceremony &middot; 4:30 PM</p>
-          <h3>Lily Vacation Farmhouse</h3>
-          <p class="addr">0060 Companario Street, Sitio Campanario, Pagkalinawan, Jalajala, Rizal</p>
-          <a class="btn" href="https://www.google.com/maps/search/?api=1&amp;query=Lily+Vacation+Farm+House%2C+Jalajala%2C+Rizal" target="_blank" rel="noopener">View map</a>
+      <h2>The Venue</h2>
+      <div class="venue-card card has-img">
+        <div class="card-img venue-photos">
+          <img src="images/venue/farmhouse.jpg" alt="The farmhouse under large acacia trees" loading="lazy">
+          <img src="images/venue/grounds.jpg" alt="Tree-shaded lawn at Lily Vacation Farmhouse" loading="lazy">
         </div>
-        <div class="card has-img">
-          <div class="card-img"><img src="images/venue/farmhouse.jpg" alt="The farmhouse under large acacia trees" loading="lazy"></div>
-          <p class="eyebrow">The Reception &middot; 6:30 PM</p>
-          <h3>Lily Vacation Farmhouse</h3>
-          <p class="addr">0060 Companario Street, Sitio Campanario, Pagkalinawan, Jalajala, Rizal</p>
-          <a class="btn" href="https://www.google.com/maps/search/?api=1&amp;query=Lily+Vacation+Farm+House%2C+Jalajala%2C+Rizal" target="_blank" rel="noopener">View map</a>
+        <p class="eyebrow">Ceremony 4:30 PM &middot; Reception 6:30 PM</p>
+        <h3>Lily Vacation Farmhouse</h3>
+        <p class="addr">0060 Companario Street, Sitio Campanario, Pagkalinawan, Jalajala, Rizal</p>
+        <p class="venue-note">The ceremony and reception are both held here, so there's no need to travel between venues.</p>
+        <a class="btn" href="https://www.google.com/maps/search/?api=1&amp;query=Lily+Vacation+Farm+House%2C+Jalajala%2C+Rizal" target="_blank" rel="noopener">View map</a>
+      </div>
+
+      <!-- Area map: Leaflet + Esri light-gray tiles, recolored to the site palette -->
+      <div class="map-block">
+        <p class="eyebrow">Finding us</p>
+        <h3 class="map-title">Jalajala, by the shores of Laguna de Bay</h3>
+        <div class="map-frame">
+          <!-- Duotone for the map tiles: light land -> cream, darker water -> sage -->
+          <svg width="0" height="0" style="position:absolute" aria-hidden="true" focusable="false">
+            <filter id="map-duotone" color-interpolation-filters="sRGB">
+              <feColorMatrix type="saturate" values="0"/>
+              <feComponentTransfer>
+                <feFuncR type="linear" slope="5" intercept="-3.7"/>
+                <feFuncG type="linear" slope="5" intercept="-3.7"/>
+                <feFuncB type="linear" slope="5" intercept="-3.7"/>
+              </feComponentTransfer>
+              <feComponentTransfer>
+                <feFuncR type="table" tableValues="0.565 0.988"/>
+                <feFuncG type="table" tableValues="0.604 0.961"/>
+                <feFuncB type="table" tableValues="0.514 0.918"/>
+              </feComponentTransfer>
+            </filter>
+          </svg>
+          <div id="area-map" role="region" aria-label="Map of Jalajala, Rizal, with nearby towns and the venue marked">
+            <p class="map-fallback">Lily Vacation Farmhouse &middot; Sitio Campanario, Pagkalinawan, Jalajala, Rizal</p>
+          </div>
         </div>
+        <p class="map-note">Pin marks Sitio Campanario, Pagkalinawan. Use the map button for turn-by-turn directions.</p>
+        <a class="btn" href="https://www.google.com/maps/dir/?api=1&amp;destination=Lily+Vacation+Farm+House%2C+Jalajala%2C+Rizal" target="_blank" rel="noopener">Get directions</a>
       </div>
     </div>
   </section>
@@ -997,6 +1156,80 @@
       alert('Thank you, ' + data.name + '!');
       e.target.reset();
     });
+  </script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.css">
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.js"></script>
+  <script>
+    // Area map. Coordinates from OpenStreetMap; the venue itself isn't on OSM,
+    // so the pin sits on Sitio Campanario, Pagkalinawan.
+    (function () {
+      var el = document.getElementById('area-map');
+      if (!el || !window.L) return;
+      el.innerHTML = '';
+
+      var venue = [14.3193, 121.3442];
+      var map = L.map(el, {
+        scrollWheelZoom: false,
+        dragging: !L.Browser.mobile,
+        tap: false,
+        zoomSnap: 0.5,
+        fadeAnimation: false,
+        attributionControl: true
+      });
+      // Small screens: closer view around Jalajala, crowded labels hidden
+      var narrow = el.clientWidth < 600;
+      map.fitBounds(narrow ? [[14.28, 121.27], [14.49, 121.51]] : [[14.27, 121.17], [14.54, 121.50]], { padding: [10, 10] });
+
+      // Esri light-gray canvas: label-free and keyless, so our own labels stay clean
+      L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/Canvas/World_Light_Gray_Base/MapServer/tile/{z}/{y}/{x}', {
+        maxZoom: 16,
+        attribution: 'Tiles &copy; Esri &mdash; Esri, HERE, Garmin, &copy; OpenStreetMap contributors'
+      }).addTo(map);
+
+      // [name, lat, lng, label side: r/l/t/b, hide on small screens, label side on small screens]
+      var towns = [
+        ['Jalajala', 14.3536, 121.3238, 'r'],
+        ['Pililla', 14.4812, 121.3076, 'r'],
+        ['Tanay', 14.4985, 121.2856, 'l', true],
+        ['Baras', 14.5219, 121.2658, 't', true],
+        ['Morong', 14.5151, 121.2381, 'l', true],
+        ['Cardona', 14.4850, 121.2311, 'l', true],
+        ['Binangonan', 14.4648, 121.1923, 'b', true],
+        ['Mabitac', 14.4259, 121.4294, 'l', true],
+        ['Siniloan', 14.4215, 121.4444, 'r', false, 'l'],
+        ['Santa Maria', 14.4700, 121.4230, 'r', false, 'l'],
+        ['Pakil', 14.3808, 121.4786, 'r', true],
+        ['Paete', 14.3641, 121.4816, 'r', false, 'l'],
+        ['Santa Cruz', 14.2818, 121.4149, 'r', true]
+      ];
+      towns.forEach(function (t) {
+        if (narrow && t[4]) return;
+        L.marker([t[1], t[2]], {
+          interactive: false,
+          keyboard: false,
+          icon: L.divIcon({ className: 'town-label', iconSize: [0, 0], html: '<i></i><span class="' + ((narrow && t[5]) || t[3]) + '">' + t[0] + '</span>' })
+        }).addTo(map);
+      });
+
+      if (!narrow) L.marker([14.355, 121.229], {
+        interactive: false, keyboard: false,
+        icon: L.divIcon({ className: 'water-label', iconSize: [0, 0], html: '<span>Talim Island</span>' })
+      }).addTo(map);
+
+      L.marker(venue, {
+        title: 'Lily Vacation Farmhouse',
+        icon: L.divIcon({
+          className: 'venue-pin',
+          iconSize: [0, 0],
+          html: '<span class="ring"></span><span class="dot"></span><span class="tag">Lily Vacation Farmhouse</span>'
+        })
+      }).addTo(map).on('click', function () {
+        window.open('https://www.google.com/maps/search/?api=1&query=Lily+Vacation+Farm+House%2C+Jalajala%2C+Rizal', '_blank', 'noopener');
+      });
+
+      // Leaflet needs a size recheck once the section reveals
+      setTimeout(function () { map.invalidateSize(); }, 600);
+    })();
   </script>
 </body>
 </html>
