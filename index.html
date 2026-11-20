@@ -719,6 +719,49 @@
       .lightbox img { max-height: calc(100vh - 11rem); max-height: calc(100svh - 11rem); border-width: 4px; }
     }
 
+    /* Wide-screen gate: the site is designed for phones, so computers and
+       landscape tablets get a "open this on your phone" screen with a QR code. */
+    #wide-gate { display: none; }
+    @media (min-width: 900px) and (min-aspect-ratio: 1/1) {
+      html, body { overflow: hidden !important; height: 100%; }
+      #wide-gate {
+        position: fixed;
+        inset: 0;
+        z-index: 9000;
+        display: grid;
+        place-items: center;
+        padding: 2rem;
+        text-align: center;
+        color: var(--ivory);
+        background:
+          linear-gradient(rgba(50, 55, 39, 0.82), rgba(50, 55, 39, 0.9)),
+          url("images/actual/B528EC89-D1C7-4C31-A3A7-11EB31201D80-10413-000003429965EA0F.jpg") center 55% / cover no-repeat;
+      }
+    }
+    #wide-gate .gate-card { max-width: 30rem; }
+    #wide-gate .eyebrow { color: var(--greige); }
+    #wide-gate .script {
+      font-size: clamp(2rem, 3.4vw, 3rem);
+      letter-spacing: 0.25em;
+      margin: 0.75rem -0.25em 1.25rem 0;
+      color: var(--ivory);
+    }
+    #wide-gate .gate-text { color: var(--greige); line-height: 1.6; }
+    #wide-gate .gate-qr {
+      width: 196px; height: 196px;
+      margin: 2rem auto 1rem;
+      padding: 14px;
+      background: var(--ivory);
+      box-shadow: 0 18px 40px rgba(0, 0, 0, 0.35);
+    }
+    #wide-gate .gate-qr svg, #wide-gate .gate-qr img { display: block; width: 100%; height: 100%; }
+    #wide-gate .gate-url {
+      font-size: 0.8rem;
+      letter-spacing: 0.08em;
+      color: var(--greige);
+      word-break: break-all;
+    }
+
     /* Timeline */
     .timeline {
       list-style: none;
@@ -866,6 +909,17 @@
 </head>
 <body>
 
+  <!-- Shown only on wide screens (see #wide-gate CSS) -->
+  <div id="wide-gate" role="dialog" aria-label="Please open this invitation on your phone">
+    <div class="gate-card">
+      <p class="eyebrow">You are invited</p>
+      <p class="script">Jeremie &amp; Michelle</p>
+      <p class="gate-text">This invitation was made for phones.<br>Scan the code with your phone's camera to open it.</p>
+      <div class="gate-qr" aria-hidden="true"></div>
+      <p class="gate-url"></p>
+    </div>
+  </div>
+
   <!-- 1. Envelope intro -->
   <div id="envelope" role="dialog" aria-label="Invitation">
     <p class="eyebrow" style="color: var(--greige)">Jeremie &amp; Michelle</p>
@@ -999,7 +1053,7 @@
   </section>
 
   <div class="photo-band">
-    <img src="images/KvKx9drB.jpg" alt="Jeremie and Michelle striking a playful pose in the field" loading="lazy">
+    <img src="images/actual/DSCF3892-web.jpg" alt="Jeremie bowing to Michelle as she reaches up to touch his face" style="object-position: center 58%" loading="lazy">
   </div>
 
   <!-- 6. Venues -->
@@ -1082,12 +1136,13 @@
     <div class="narrow">
       <h2>Attire Guide</h2>
       <p class="lede">Our theme is Earthy Elegance: soft sages through deep olive greens.</p>
-      <div class="swatches" aria-label="Wedding colors: sage, olive, deep olive, greige, cream">
-        <i style="background: var(--sage)"></i>
-        <i style="background: var(--olive)"></i>
-        <i style="background: var(--olive-deep)"></i>
-        <i style="background: var(--greige)"></i>
-        <i style="background: var(--cream)"></i>
+      <!-- Attire palette, from the design concept deck -->
+      <div class="swatches" role="img" aria-label="Wedding colors: sage green, grass green, deep green, olive green, dark olive">
+        <i style="background: #8cb18f" title="Sage green"></i>
+        <i style="background: #5e9726" title="Grass green"></i>
+        <i style="background: #447a00" title="Deep green"></i>
+        <i style="background: #647c00" title="Olive green"></i>
+        <i style="background: #4d5725" title="Dark olive"></i>
       </div>
 
       <div class="attire-group">
@@ -1187,6 +1242,31 @@
   </footer>
 
   <script>
+    // Wide-screen gate: fill in the link and draw the QR code (library loaded
+    // only on wide screens, so phones don't download it).
+    (() => {
+      const mq = matchMedia('(min-width: 900px) and (min-aspect-ratio: 1/1)');
+      const url = 'https://jeremieandmichelle.com/';   // the QR always opens the main domain
+      document.querySelector('#wide-gate .gate-url').textContent = url.replace(/^https?:\/\//, '');
+      let drawn = false;
+      const draw = () => {
+        if (drawn || !mq.matches) return;
+        drawn = true;
+        const s = document.createElement('script');
+        s.src = 'https://cdnjs.cloudflare.com/ajax/libs/qrcode-generator/1.4.4/qrcode.min.js';
+        s.onload = () => {
+          const qr = qrcode(0, 'M');
+          qr.addData(url);
+          qr.make();
+          document.querySelector('#wide-gate .gate-qr').innerHTML =
+            qr.createSvgTag({ cellSize: 4, margin: 0, scalable: true });
+        };
+        document.head.appendChild(s);
+      };
+      draw();
+      mq.addEventListener ? mq.addEventListener('change', draw) : mq.addListener(draw);
+    })();
+
     // Envelope intro: lock scroll until opened, then play the hero entrance
     document.body.classList.add('locked');
     document.getElementById('open-invite').addEventListener('click', () => {

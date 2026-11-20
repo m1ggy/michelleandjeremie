@@ -21,6 +21,18 @@ Links saved for the Jeremie & Michelle wedding site.
 | Ivory | `#fffaf3` | cards, inputs |
 | Peach | `#efd5bc` | rare highlight |
 
+### Attire palette (from deck "Design Concept & Theme", `info/Jeremie & Michelle.zip` page 3)
+
+Shown as the swatches in the Attire Guide.
+
+| Name | Hex |
+|------|-----|
+| Sage green | `#8cb18f` |
+| Grass green | `#5e9726` |
+| Deep green | `#447a00` |
+| Olive green | `#647c00` |
+| Dark olive | `#4d5725` |
+
 ### Fonts (from page font files)
 
 - Headings: **The Seasons** (paid) — site uses free stand-in **Cormorant Garamond**
