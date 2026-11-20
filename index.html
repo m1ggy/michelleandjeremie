@@ -145,6 +145,25 @@
     #envelope .script { font-size: clamp(1.9rem, 7vw, 3.25rem); }
     /* Names just a touch smaller than "You are invited!" */
     #envelope .eyebrow { font-size: clamp(1.2rem, 4.7vw, 2.35rem); margin-bottom: 0.5rem; }
+    /* Photos preload behind the envelope; the button unlocks when they're ready */
+    #open-invite { min-width: 11rem; transition: opacity 0.4s ease, background 0.2s, color 0.2s; }
+    #open-invite:disabled { opacity: 0.55; cursor: progress; }
+    #open-invite:disabled:hover { background: transparent; color: var(--ivory); }
+    .load-bar {
+      width: 9rem; height: 1px;
+      background: rgba(255, 250, 243, 0.2);
+      overflow: hidden;
+      transition: opacity 0.6s ease 0.3s;
+    }
+    .load-bar i {
+      display: block;
+      height: 100%;
+      background: var(--ivory);
+      transform: scaleX(var(--p, 0));
+      transform-origin: left;
+      transition: transform 0.4s ease;
+    }
+    .load-bar.done { opacity: 0; }
 
     /* ---------- Nav ---------- */
     nav {
@@ -191,7 +210,7 @@
       /* Portrait shot of the couple in front of the trees. On wide screens the
          photo is cropped to a band around their faces with the trees above for
          the names; on portrait screens the whole frame shows. */
-      background: url("images/actual/B528EC89-D1C7-4C31-A3A7-11EB31201D80-10413-000003429965EA0F.jpg") 50% 52% / cover no-repeat;
+      background: url("images/actual/B528EC89-web.jpg") 50% 52% / cover no-repeat;
     }
     @media (max-aspect-ratio: 4/5) {
       .hero-bg { background-position: 50% 100%; }
@@ -735,7 +754,7 @@
         color: var(--ivory);
         background:
           linear-gradient(rgba(50, 55, 39, 0.82), rgba(50, 55, 39, 0.9)),
-          url("images/actual/B528EC89-D1C7-4C31-A3A7-11EB31201D80-10413-000003429965EA0F.jpg") center 55% / cover no-repeat;
+          url("images/actual/B528EC89-web.jpg") center 55% / cover no-repeat;
       }
     }
     #wide-gate .gate-card { max-width: 30rem; }
@@ -906,6 +925,7 @@
       .gallery-stage { grid-template-columns: 1fr 1fr; }
     }
   </style>
+  <link rel="preload" as="image" href="images/actual/B528EC89-web.jpg" fetchpriority="high">
 </head>
 <body>
 
@@ -924,7 +944,8 @@
   <div id="envelope" role="dialog" aria-label="Invitation">
     <p class="eyebrow" style="color: var(--greige)">Jeremie &amp; Michelle</p>
     <p class="script">You are invited!</p>
-    <button class="btn light" id="open-invite">Tap to open</button>
+    <button class="btn light" id="open-invite" disabled>Loading&hellip;</button>
+    <div class="load-bar" aria-hidden="true"><i></i></div>
   </div>
 
   <nav>
@@ -975,11 +996,11 @@
 
     <div class="gallery wrap">
       <div class="gallery-stage">
-      <figure data-ratio="2/3"><img src="images/actual/3F17DAAE-50CF-4298-9C0E-9F2D22FAEFFB-9851-000002F07B214DD6.jpg" alt="Jeremie and Michelle walking hand in hand across the field" loading="lazy"></figure>
+      <figure data-ratio="2/3"><img src="images/actual/3F17DAAE-web.jpg" alt="Jeremie and Michelle walking hand in hand across the field" loading="lazy"></figure>
       <figure data-ratio="2/3"><img src="images/actual/DSCF3952-web.jpg" alt="Jeremie lifting Michelle into the air" loading="lazy"></figure>
       <figure data-ratio="3/2" class="wide"><img src="images/actual/DSCF3590-web.jpg" alt="Jeremie and Michelle with their arms flung wide in front of the trees" loading="lazy"></figure>
-      <figure data-ratio="3/2" class="wide"><img src="images/actual/31536123-2543-4827-B5E0-142316EBDC89-10413-00000347614FEB8E.jpg" alt="Jeremie and Michelle mid-stride on a hilltop under a blue sky" loading="lazy"></figure>
-      <figure data-ratio="2/3"><img src="images/actual/E8DDB53E-E534-4CD1-8AAE-AE22DDA0141D-10413-00000347CD6A371B.jpg" alt="Jeremie and Michelle in sunglasses, sitting on a grassy hill" loading="lazy"></figure>
+      <figure data-ratio="3/2" class="wide"><img src="images/actual/31536123-web.jpg" alt="Jeremie and Michelle mid-stride on a hilltop under a blue sky" loading="lazy"></figure>
+      <figure data-ratio="2/3"><img src="images/actual/E8DDB53E-web.jpg" alt="Jeremie and Michelle in sunglasses, sitting on a grassy hill" loading="lazy"></figure>
       <figure data-ratio="2/3"><img src="images/actual/DSCF3149-web.jpg" alt="Jeremie and Michelle walking together beneath tall trees" loading="lazy"></figure>
       <div class="gallery-count"><p class="gallery-hint" aria-hidden="true">Scroll to flip through</p><span aria-hidden="true"></span><div class="dots"></div></div>
       </div>
@@ -1269,6 +1290,50 @@
 
     // Envelope intro: lock scroll until opened, then play the hero entrance
     document.body.classList.add('locked');
+
+    // Preload every photo on the page while the envelope is showing, so nothing
+    // pops in half-loaded later. Unlocks when all are decoded, or after 8s so a
+    // slow connection never gets stuck (the rest keep loading in the background).
+    (() => {
+      const btn = document.getElementById('open-invite');
+      const bar = document.querySelector('.load-bar');
+      const urls = new Set();
+      const bgUrl = (sel) => {
+        const el = document.querySelector(sel);
+        const m = el && getComputedStyle(el).backgroundImage.match(/url\(["']?(.*?)["']?\)/);
+        if (m) urls.add(m[1]);
+      };
+      bgUrl('.hero-bg');
+      document.querySelectorAll('section img[src], .photo-band img[src]').forEach((img) => {
+        img.loading = 'eager';
+        urls.add(img.src);
+      });
+      bgUrl('footer');
+      const list = [...urls];
+      let done = 0, ready = false;
+      const unlock = () => {
+        if (ready) return;
+        ready = true;
+        btn.disabled = false;
+        btn.textContent = 'Tap to open';
+        bar.classList.add('done');
+      };
+      const tick = () => {
+        done++;
+        bar.style.setProperty('--p', (done / list.length).toFixed(3));
+        if (done >= list.length) unlock();
+      };
+      list.forEach((u) => {
+        const im = new Image();
+        im.decoding = 'async';
+        im.src = u;
+        (im.decode ? im.decode() : new Promise((r, j) => { im.onload = r; im.onerror = j; }))
+          .then(tick, tick);
+      });
+      if (!list.length) unlock();
+      setTimeout(unlock, 8000);
+    })();
+
     document.getElementById('open-invite').addEventListener('click', () => {
       document.getElementById('envelope').classList.add('open');
       document.body.classList.remove('locked');
