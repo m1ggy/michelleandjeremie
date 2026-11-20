@@ -253,15 +253,16 @@
     /* Editorial: names run edge to edge of the screen */
     .hero .script {
       align-self: stretch;
-      margin: 0 calc(-1rem + 2vw);   /* cancel the hero's side padding, keep a hairline inset */
-      font-size: 18.4vw;
+      margin: 0 -1rem;               /* cancel the hero's side padding */
+      font-size: 18.4vw;             /* fallback; JS fits the ink exactly to the screen edges */
       letter-spacing: 0;
       line-height: 0.95;
       color: var(--ivory);
       text-shadow: 0 2px 18px rgba(50,55,39,0.35);
     }
-    .hero .script .l1 { display: block; text-align: left; }
-    .hero .script .l2 { display: block; text-align: right; }
+    .hero .script .l1 { display: block; text-align: left; white-space: nowrap; }
+    .hero .script .l2 { display: block; text-align: right; white-space: nowrap; }
+    .hero .script.fitted .l2 { text-align: left; }   /* JS positions it flush right */
     /* Ampersand on its own line, centred between the two names */
     .and { display: block; }
     .hero .and { display: inline; }
@@ -1296,6 +1297,32 @@
       };
       draw();
       mq.addEventListener ? mq.addEventListener('change', draw) : mq.addListener(draw);
+    })();
+
+    // Hero names edge to edge: size so the wider line's ink spans the screen, then
+    // nudge "JEREMIE &" so its J touches the left edge and "MICHELLE" so its last E
+    // touches the right edge (letters have built-in side space the CSS can't remove).
+    (() => {
+      const h1 = document.querySelector('.hero .script');
+      const l1 = h1 && h1.querySelector('.l1'), l2 = h1 && h1.querySelector('.l2');
+      if (!l1 || !l2) return;
+      const ctx = document.createElement('canvas').getContext('2d');
+      const fit = () => {
+        const W = h1.clientWidth;
+        const fam = getComputedStyle(h1).fontFamily;
+        ctx.font = `100px ${fam}`;
+        const m1 = ctx.measureText(l1.textContent.toUpperCase().replace(/\s+/g, ' ').trim());
+        const m2 = ctx.measureText(l2.textContent.toUpperCase().trim());
+        const ink1 = m1.actualBoundingBoxLeft + m1.actualBoundingBoxRight;
+        const ink2 = m2.actualBoundingBoxLeft + m2.actualBoundingBoxRight;
+        const k = W / Math.max(ink1, ink2);
+        h1.style.fontSize = (100 * k) + 'px';
+        l1.style.transform = `translateX(${m1.actualBoundingBoxLeft * k}px)`;
+        l2.style.transform = `translateX(${W - m2.actualBoundingBoxRight * k}px)`;
+        h1.classList.add('fitted');
+      };
+      (document.fonts ? document.fonts.ready : Promise.resolve()).then(fit);
+      window.addEventListener('resize', fit);
     })();
 
     // Envelope intro: lock scroll until opened, then play the hero entrance
