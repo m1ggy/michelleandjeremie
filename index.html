@@ -250,14 +250,14 @@
     .hero > :not(.hero-bg) { position: relative; z-index: 2; }
     .hero .tbd { color: var(--peach); }
     /* Names large and staggered: "JEREMIE &" flush left, "MICHELLE" flush right */
-    /* Editorial: names run edge to edge of the screen */
+    /* Editorial: staggered names touching the screen edges, sky-grey */
     .hero .script {
       align-self: stretch;
       margin: 0 -1rem;               /* cancel the hero's side padding */
       font-size: 18.4vw;             /* fallback; JS fits the ink exactly to the screen edges */
       letter-spacing: 0;
       line-height: 0.95;
-      color: var(--ivory);
+      color: #dddcd5;
       text-shadow: 0 2px 18px rgba(50,55,39,0.35);
     }
     .hero .script .l1 { display: block; text-align: left; white-space: nowrap; }
@@ -471,10 +471,11 @@
     .band-greige .ornament { color: var(--olive); }
     .band-olive .ornament { color: var(--greige); }
 
-    /* Entourage: whole section in the same sans as the invitation's "joyfully invite you" */
-    #entourage h2, #entourage h3, #entourage .why, #entourage li { font-family: var(--sans); }
-    #entourage h2 { font-weight: 400; letter-spacing: 0.12em; }
-    #entourage .role h3 { font-weight: 600; letter-spacing: 0.2em; }
+    /* Entourage: heading and role titles in the display serif; text and names in the
+       same sans as the invitation's "joyfully invite you" */
+    #entourage .why, #entourage li { font-family: var(--sans); }
+    #entourage h2 { color: #495d23; }   /* dark (moss) green */
+    #entourage .families { text-transform: none; letter-spacing: 0.08em; line-height: 1.5; }
     #entourage .why { font-weight: 300; font-size: 1rem; }
     #entourage li { font-weight: 300; font-size: 1.15rem; }
     .role { margin-top: 3.5rem; }
@@ -1022,15 +1023,15 @@
   <section id="entourage" class="band-greige">
     <div class="wrap">
       <h2>Entourage</h2>
-      <p class="eyebrow" style="margin-top: 0.75rem; font-size: clamp(1rem, 3vw, 1.25rem)">Saturay &ndash; Garrote</p>
+      <p class="eyebrow families" style="margin-top: 0.75rem; font-size: clamp(1rem, 3vw, 1.25rem)">Saturay<br>Garrote</p>
       <svg class="ornament" viewBox="0 0 400 16" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1"><path d="M17 8H168M232 8H383"/><path d="M1 8L9 4L17 8L9 12Z M383 8L391 4L399 8L391 12Z M200 .8L207.2 8L200 15.2L192.8 8Z"/><path fill="currentColor" stroke="none" d="M172 8L184 4.5L190 8L184 11.5Z M228 8L216 4.5L210 8L216 11.5Z M200 4.5L203.5 8L200 11.5L196.5 8Z"/></svg>
 
       <div class="role">
         <h3>Parents of the Couple</h3>
         <p class="why">With love and the blessing of our beloved parents</p>
         <ul>
-          <li>Gerry Saturay<span class="and">&amp;</span>Erlen Saturay</li>
-          <li>Imelda Garrote<span class="and">&amp;</span>Zenaida Paderanga</li>
+          <li>Gerry Saturay &amp; Erlen Saturay</li>
+          <li>Imelda Garrote &amp; Zenaida Paderanga</li>
         </ul>
       </div>
 
@@ -1204,7 +1205,6 @@
     <div class="narrow">
       <h2>Gift Guide</h2>
       <p class="lede">Your presence at our wedding is the greatest gift we could ask for. If you wish to honor us further, a monetary gift would be greatly appreciated as we begin our new life together. Your generosity will help us build our future, and we are truly grateful for your love and support on this special day.</p>
-      <p style="margin-top: 2rem"><a class="btn light" href="#" target="_blank" rel="noopener">Gift registry</a></p>
     </div>
   </section>
 
@@ -1299,9 +1299,9 @@
       mq.addEventListener ? mq.addEventListener('change', draw) : mq.addListener(draw);
     })();
 
-    // Hero names edge to edge: size so the wider line's ink spans the screen, then
-    // nudge "JEREMIE &" so its J touches the left edge and "MICHELLE" so its last E
-    // touches the right edge (letters have built-in side space the CSS can't remove).
+    // Hero names, staggered edge to edge: "JEREMIE &" with its J on the left screen
+    // edge, "MICHELLE" with its last E on the right edge, each line ~78% of the width
+    // (letters have built-in side space the CSS can't remove, so measure the ink).
     (() => {
       const h1 = document.querySelector('.hero .script');
       const l1 = h1 && h1.querySelector('.l1'), l2 = h1 && h1.querySelector('.l2');
@@ -1315,7 +1315,7 @@
         const m2 = ctx.measureText(l2.textContent.toUpperCase().trim());
         const ink1 = m1.actualBoundingBoxLeft + m1.actualBoundingBoxRight;
         const ink2 = m2.actualBoundingBoxLeft + m2.actualBoundingBoxRight;
-        const k = W / Math.max(ink1, ink2);
+        const k = W * 0.78 / Math.max(ink1, ink2);   // leaves open space after "&" and before "MICHELLE"
         h1.style.fontSize = (100 * k) + 'px';
         l1.style.transform = `translateX(${m1.actualBoundingBoxLeft * k}px)`;
         l2.style.transform = `translateX(${W - m2.actualBoundingBoxRight * k}px)`;
