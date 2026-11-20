@@ -892,6 +892,8 @@
         url("images/ec3GQGKa.jpg") center 55% / cover no-repeat var(--olive-deep);
       color: var(--greige);
     }
+    /* Always one line: shrinks with the screen instead of wrapping */
+    footer .footer-ask { white-space: nowrap; font-size: min(1.0625rem, calc((100vw - 2.5rem) / 24)); }
     footer .footer-close { margin-top: auto; padding-top: 2rem; color: var(--ivory); text-shadow: 0 1px 10px rgba(30,33,23,0.6); }
 
     /* Placeholder text still to fill in */
@@ -1050,7 +1052,7 @@
         <p class="why">To guide and support us with wisdom and love</p>
         <ul>
           <li>Michelle Borromeo</li>
-          <li>Kristine Maravilla</li>
+          <li>Kristine Maravilla-Castillo</li>
           <li>Joseth Francisco</li>
           <li>Yen Sawit &amp; Cherwin Sawit</li>
           <li>Genelyn Saturay &amp; Melvin Hiponia</li>
@@ -1277,8 +1279,11 @@
     <button class="lb-next" type="button" aria-label="Next photo"><svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M8.5 5l7 7-7 7"/></svg></button>
   </div>
 
+  <!-- Background music: starts when the envelope is opened (browsers block sound before a tap) -->
+  <audio id="bg-music" src="music/valentine-sax.mp3" loop preload="auto"></audio>
+
   <footer>
-    <p>If you have any questions, please get in contact with us.</p>
+    <p class="footer-ask">If you have any questions, please get in contact with us.</p>
     <p class="footer-close">We can't wait to celebrate with you.</p>
   </footer>
 
@@ -1380,10 +1385,33 @@
       setTimeout(unlock, 8000);
     })();
 
+    // Background music, no visible player. The envelope tap is the user gesture that
+    // lets it play; if the browser still refuses, try again on the next tap anywhere.
+    const music = document.getElementById('bg-music');
+    let musicOn = false;
+    const startMusic = () => {
+      if (!music || musicOn) return;
+      music.volume = 0;
+      music.play().then(() => {
+        musicOn = true;
+        // Gentle fade in (volume is fixed on iOS; it just starts at full there)
+        let v = 0;
+        const fade = setInterval(() => { v = Math.min(0.6, v + 0.04); music.volume = v; if (v >= 0.6) clearInterval(fade); }, 120);
+      }).catch(() => {
+        document.addEventListener('pointerdown', startMusic, { once: true });
+      });
+    };
+    // Pause while the tab is in the background, resume on return
+    document.addEventListener('visibilitychange', () => {
+      if (!musicOn) return;
+      if (document.hidden) music.pause(); else music.play().catch(() => {});
+    });
+
     document.getElementById('open-invite').addEventListener('click', () => {
       document.getElementById('envelope').classList.add('open');
       document.body.classList.remove('locked');
       document.body.classList.add('opened');
+      startMusic();
     });
 
     // Gallery pins and animates on scroll unless the visitor prefers reduced motion
