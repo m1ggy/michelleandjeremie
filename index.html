@@ -993,8 +993,8 @@
       <div class="gallery-stage">
       <figure data-ratio="2/3" data-cover><img src="images/actual/ADCEED27-web.jpg" alt="Jeremie and Michelle relaxing in camp chairs on a grassy hill under a wide sky" loading="lazy"></figure>
       <figure data-ratio="2/3"><img src="images/actual/DSCF3952-web.jpg" alt="Jeremie lifting Michelle into the air" loading="lazy"></figure>
-      <figure data-ratio="3/2" class="wide"><img src="images/actual/DSCF3590-web.jpg" alt="Jeremie and Michelle with their arms flung wide in front of the trees" loading="lazy"></figure>
-      <figure data-ratio="3/2" class="wide"><img src="images/actual/31536123-web.jpg" alt="Jeremie and Michelle mid-stride on a hilltop under a blue sky" loading="lazy"></figure>
+      <figure data-ratio="2/3"><img style="object-position: 51% 50%" src="images/actual/DSCF3590-web.jpg" alt="Jeremie and Michelle with their arms flung wide in front of the trees" loading="lazy"></figure>
+      <figure data-ratio="2/3"><img style="object-position: 90% 50%" src="images/actual/31536123-web.jpg" alt="Jeremie and Michelle mid-stride on a hilltop under a blue sky" loading="lazy"></figure>
       <figure data-ratio="2/3"><img src="images/actual/E8DDB53E-web.jpg" alt="Jeremie and Michelle in sunglasses, sitting on a grassy hill" loading="lazy"></figure>
       <figure data-ratio="2/3"><img src="images/actual/DSCF3149-web.jpg" alt="Jeremie and Michelle walking together beneath tall trees" loading="lazy"></figure>
       <div class="gallery-count"><p class="gallery-hint" aria-hidden="true">Scroll to flip through</p><span aria-hidden="true"></span><div class="dots"></div></div>
@@ -1078,7 +1078,7 @@
         <div class="card-img venue-photos">
           <img src="images/venue/farmhouse.jpg" alt="The farm house under large acacia trees" loading="lazy">
         </div>
-        <p class="eyebrow">Ceremony 4:30 PM &middot; Reception 6:30 PM</p>
+        <p class="eyebrow">Ceremony 4:30 PM<br>Reception 6:30 PM</p>
         <h3>Lily Vacation Farm House</h3>
         <p class="addr">0060 Companario Street, Sitio Campanario, Pagkalinawan, Jalajala, Rizal</p>
         <p class="venue-note">The ceremony and reception are both held here, so there's no need to travel between venues.</p>
@@ -1518,12 +1518,11 @@
         const Wg = Math.min(W, 1280);  // grid and scatter stay within this width on big screens
         const narrow = W < 600;
         const pad = narrow ? 10 : 20, gap = narrow ? 8 : 16;
-        // Each photo keeps its own shape (data-ratio, width / height), so nothing is cropped.
-        // Grid = justified rows: photos in a row share one height. Mirrored row patterns:
-        // desktop [P P L] / [L P P]; phones, all full width: [P P] / [L] / [L] / [P P]
-        // (taller than the screen; it pans during the hold).
+        // Each photo is sized by its data-ratio (width / height); all are portrait now,
+        // landscapes cropped via object-position. Grid = justified rows sharing one height:
+        // desktop 3 + 3, phones 2 + 2 + 2 (taller than the screen; it pans during the hold).
         const ratio = (f) => { const [w, hh] = (f.dataset.ratio || '3/4').split('/').map(Number); return w / hh; };
-        const rows = narrow ? [[0, 1], [2], [3], [4, 5]] : [[0, 1, 2], [3, 4, 5]];
+        const rows = narrow ? [[0, 1], [2, 3], [4, 5]] : [[0, 1, 2], [3, 4, 5]];
         const availW = Wg - pad * 2, availH = H - pad * 2 - 40;
         let rowHs = rows.map((r) => (availW - gap * (r.length - 1)) / r.reduce((s, i) => s + ratio(figs[i]), 0));
         const sumH = () => rowHs.reduce((s, x) => s + x, 0) + gap * (rows.length - 1);
