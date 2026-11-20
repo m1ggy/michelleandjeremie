@@ -9,7 +9,7 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <!-- Design ref: https://rhiweb.my.canva.site/wedding-website-20
        That site uses The Seasons (paid) for headings; Cormorant Garamond is the free stand-in. -->
-  <link href="https://fonts.googleapis.com/css2?family=Jost:wght@300;400;500&family=Cormorant+Garamond:wght@400;500;600&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Jost:wght@300;400;500;600&family=Cormorant+Garamond:wght@400;500;600&display=swap" rel="stylesheet">
   <!-- Animations and the envelope only kick in when JS runs, so the page still works without it. -->
   <script>document.documentElement.classList.add('js');</script>
   <style>
@@ -215,9 +215,8 @@
     }
     @media (max-aspect-ratio: 4/5) {
       .hero-bg { background-position: 50% 100%; }
-      /* Phones: smaller, higher names so they clear the couple's heads */
-      .hero { padding-top: 3.5rem; }
-      .hero .script { font-size: clamp(1.6rem, 7.4vw, 2.6rem); }
+      /* Phones: names sit over the trees, a quarter of the way down */
+      .hero { padding-top: 24svh; }
     }
 
     /* Arched portrait in the invitation */
@@ -250,23 +249,22 @@
     }
     .hero > :not(.hero-bg) { position: relative; z-index: 2; }
     .hero .tbd { color: var(--peach); }
-    /* Names stacked like the invitation: JEREMIE / & / MICHELLE */
+    /* Names large and staggered: "JEREMIE &" flush left, "MICHELLE" flush right */
     .hero .script {
-      font-size: clamp(1.8rem, 8.2vw, 3.8rem);
-      letter-spacing: 0.25em;
-      line-height: 1.25;
-      margin-right: -0.25em; /* offset trailing letter-spacing so lines stay centered */
-      color: var(--greige);
-      text-shadow: 0 2px 24px rgba(50,55,39,0.45);
+      align-self: stretch;
+      width: min(100%, 52rem);
+      margin: 0 auto;
+      font-size: min(13.6vw, 7rem);
+      letter-spacing: 0.01em;
+      line-height: 1.02;
+      color: var(--ivory);
+      text-shadow: 0 2px 18px rgba(50,55,39,0.35);
     }
+    .hero .script .l1 { display: block; text-align: left; }
+    .hero .script .l2 { display: block; text-align: right; }
     /* Ampersand on its own line, centred between the two names */
     .and { display: block; }
-    /* Hero: "JEREMIE &" on the first line, "MICHELLE" below */
     .hero .and { display: inline; }
-    /* Wide screens: names on one line so they stay above the couple */
-    @media (min-width: 700px) {
-      .hero .script { font-size: clamp(2.4rem, 4.3vw, 3.8rem); }
-    }
 
     /* ---------- Sections ---------- */
     section {
@@ -467,7 +465,17 @@
       border-bottom-color: var(--olive);
     }
 
-    /* Entourage */
+    /* Ornamental divider (recreated from the design screenshot) */
+    .ornament { display: block; width: min(420px, 88%); height: auto; margin: 1.5rem auto; opacity: 0.85; }
+    .band-greige .ornament { color: var(--olive); }
+    .band-olive .ornament { color: var(--greige); }
+
+    /* Entourage: whole section in the same sans as the invitation's "joyfully invite you" */
+    #entourage h2, #entourage h3, #entourage .why, #entourage li { font-family: var(--sans); }
+    #entourage h2 { font-weight: 400; letter-spacing: 0.12em; }
+    #entourage .role h3 { font-weight: 600; letter-spacing: 0.2em; }
+    #entourage .why { font-weight: 300; font-size: 1rem; }
+    #entourage li { font-weight: 300; font-size: 1.15rem; }
     .role { margin-top: 3.5rem; }
     .role .why {
       font-family: var(--serif);
@@ -867,7 +875,7 @@
         url("images/ec3GQGKa.jpg") center 55% / cover no-repeat var(--olive-deep);
       color: var(--greige);
     }
-    footer .script { font-size: 2rem; color: var(--ivory); }
+    footer .footer-close { margin-top: 1.5rem; font-size: clamp(1.3rem, 5vw, 1.8rem); color: var(--ivory); }
 
     /* Placeholder text still to fill in */
     .tbd { color: var(--sage); }
@@ -957,7 +965,7 @@
   <!-- 2. Hero -->
   <header class="hero">
     <div class="hero-bg" aria-hidden="true"></div>
-    <h1 class="script hero-in" style="--d: 0.45s">Jeremie <span class="and">&amp;</span><br>Michelle</h1>
+    <h1 class="script hero-in" style="--d: 0.45s"><span class="l1">Jeremie <span class="and">&amp;</span></span><span class="l2">Michelle</span></h1>
   </header>
 
   <!-- 3. Save the date / invitation -->
@@ -965,6 +973,7 @@
     <div class="narrow">
       <div class="arch"><img src="images/actual/DSCF3405-web.jpg" alt="Michelle with her arms around Jeremie, both smiling" loading="lazy"></div>
       <img class="daisy" src="images/actual/daisy.png" alt="" aria-hidden="true" loading="lazy">
+      <svg class="ornament" viewBox="0 0 400 16" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1"><path d="M17 8H168M232 8H383"/><path d="M1 8L9 4L17 8L9 12Z M383 8L391 4L399 8L391 12Z M200 .8L207.2 8L200 15.2L192.8 8Z"/><path fill="currentColor" stroke="none" d="M172 8L184 4.5L190 8L184 11.5Z M228 8L216 4.5L210 8L216 11.5Z M200 4.5L203.5 8L200 11.5L196.5 8Z"/></svg>
       <p class="names">Jeremie<span class="and">&amp;</span>Michelle</p>
       <p class="lede">joyfully invite you to their wedding celebration</p>
       <div class="divider"></div>
@@ -1007,6 +1016,7 @@
     <div class="wrap">
       <h2>Entourage</h2>
       <p class="eyebrow" style="margin-top: 0.75rem; font-size: clamp(1rem, 3vw, 1.25rem)">Saturay &ndash; Garrote</p>
+      <svg class="ornament" viewBox="0 0 400 16" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1"><path d="M17 8H168M232 8H383"/><path d="M1 8L9 4L17 8L9 12Z M383 8L391 4L399 8L391 12Z M200 .8L207.2 8L200 15.2L192.8 8Z"/><path fill="currentColor" stroke="none" d="M172 8L184 4.5L190 8L184 11.5Z M228 8L216 4.5L210 8L216 11.5Z M200 4.5L203.5 8L200 11.5L196.5 8Z"/></svg>
 
       <div class="role">
         <h3>Parents of the Couple</h3>
@@ -1024,8 +1034,8 @@
           <li>Michelle Borromeo</li>
           <li>Kristine Maravilla</li>
           <li>Joseth Francisco</li>
-          <li>Yen Sawit<span class="and">&amp;</span>Cherwin Sawit</li>
-          <li>Genelyn Saturay<span class="and">&amp;</span>Melvin Hiponia</li>
+          <li>Yen Sawit &amp; Cherwin Sawit</li>
+          <li>Genelyn Saturay &amp; Melvin Hiponia</li>
         </ul>
       </div>
 
@@ -1252,8 +1262,8 @@
   </div>
 
   <footer>
-    <p class="script">Jeremie<span class="and">&amp;</span>Michelle</p>
-    <p style="margin-top: 0.75rem">If you have any questions, please get in contact with us.<br>We can't wait to celebrate with you.</p>
+    <p>If you have any questions, please get in contact with us.</p>
+    <p class="script footer-close">We can't wait to celebrate with you.</p>
   </footer>
 
   <script>
