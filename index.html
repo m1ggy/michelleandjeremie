@@ -217,8 +217,7 @@
       .hero-bg { background-position: 50% 100%; }
       /* Phones: smaller, higher names so they clear the couple's heads */
       .hero { padding-top: 3.5rem; }
-      .hero .script { font-size: clamp(1.8rem, 8.2vw, 2.6rem); }
-      .hero .date { font-size: 1.5rem; }
+      .hero .script { font-size: clamp(1.6rem, 7.4vw, 2.6rem); }
     }
 
     /* Arched portrait in the invitation */
@@ -250,12 +249,6 @@
       background: linear-gradient(180deg, rgba(50,55,39,0.6) 0%, rgba(50,55,39,0.2) 50%, rgba(50,55,39,0.1) 75%, rgba(50,55,39,0.35) 100%);
     }
     .hero > :not(.hero-bg) { position: relative; z-index: 2; }
-    .hero .eyebrow { color: var(--greige); }
-    /* "We're getting married" sits higher, apart from the names */
-    .hero .eyebrow:not(.place) { margin: -2.5rem 0 4rem; }
-    @media (max-aspect-ratio: 4/5) {
-      .hero .eyebrow:not(.place) { margin: -1.5rem 0 2.75rem; }
-    }
     .hero .tbd { color: var(--peach); }
     /* Names stacked like the invitation: JEREMIE / & / MICHELLE */
     .hero .script {
@@ -268,20 +261,8 @@
     }
     /* Ampersand on its own line, centred between the two names */
     .and { display: block; }
-    .hero .and {
-      display: block;
-      font-size: 0.85em;
-      margin: 0.1em 0;
-    }
-    /* Date + address pinned to the bottom of the hero */
-    .hero .date {
-      margin-top: auto;
-      font-family: var(--serif);
-      font-size: clamp(1.75rem, 5vw, 2.5rem);
-      letter-spacing: 0.3em;
-    }
-    .hero .date, .hero .place { text-shadow: 0 1px 12px rgba(50,55,39,0.6); }
-    .hero .place { margin-top: 0.5rem; }
+    /* Hero: "JEREMIE &" on the first line, "MICHELLE" below */
+    .hero .and { display: inline; }
     /* Wide screens: names on one line so they stay above the couple */
     @media (min-width: 700px) {
       .hero .script { font-size: clamp(2.4rem, 4.3vw, 3.8rem); }
@@ -617,6 +598,7 @@
       background: radial-gradient(ellipse at center, rgba(252, 245, 234, 0.2) 0%, rgba(252, 245, 234, 0.55) 100%);
     }
     .gallery.pinned .gallery-count { z-index: 50; }
+    .gallery.pinned .gallery-count.on-photo { color: var(--ivory); text-shadow: 0 1px 10px rgba(30, 33, 23, 0.7); }
     .gallery.pinned figure {
       position: absolute;
       margin: 0;
@@ -627,6 +609,9 @@
       box-shadow: 0 14px 34px rgba(50, 55, 39, 0.28);
     }
     .gallery.pinned:not(.spread) figure:hover img { transform: none; }
+    /* First slide fills the stage like a cover photo until the grid spreads */
+    .gallery.pinned figure.as-cover { outline: none; box-shadow: none; border-radius: 0; }
+    .gallery.pinned figure.as-cover img { object-position: 50% 62%; }
     .gallery.pinned .gallery-count {
       display: block;
       position: absolute;
@@ -945,7 +930,7 @@
   <div id="wide-gate" role="dialog" aria-label="Please open this invitation on your phone">
     <div class="gate-card">
       <p class="eyebrow">You are invited</p>
-      <p class="script">Jeremie &amp; Michelle</p>
+      <p class="script">Jeremie<span class="and">&amp;</span>Michelle</p>
       <p class="gate-text">This invitation was made for phones.<br>Scan the code with your phone's camera to open it.</p>
       <div class="gate-qr" aria-hidden="true"></div>
       <p class="gate-url"></p>
@@ -954,7 +939,7 @@
 
   <!-- 1. Envelope intro -->
   <div id="envelope" role="dialog" aria-label="Invitation">
-    <p class="eyebrow" style="color: var(--greige)">Jeremie &amp; Michelle</p>
+    <p class="eyebrow" style="color: var(--greige)">Jeremie<span class="and">&amp;</span>Michelle</p>
     <p class="script">You are invited!</p>
     <button class="btn light" id="open-invite" disabled>Loading&hellip;</button>
     <div class="load-bar" aria-hidden="true"><i></i></div>
@@ -971,10 +956,8 @@
 
   <!-- 2. Hero -->
   <header class="hero">
-    <div class="hero-bg" aria-hidden="true"></div>    <p class="eyebrow hero-in" style="--d: 0.2s">We're getting married</p>
-    <h1 class="script hero-in" style="--d: 0.45s">Jeremie<span class="and">&amp;</span>Michelle</h1>
-    <p class="date hero-in" style="--d: 0.8s">02 . 20 . 27</p>
-    <p class="eyebrow place hero-in" style="--d: 1s">Jalajala, Rizal</p>
+    <div class="hero-bg" aria-hidden="true"></div>
+    <h1 class="script hero-in" style="--d: 0.45s">Jeremie <span class="and">&amp;</span><br>Michelle</h1>
   </header>
 
   <!-- 3. Save the date / invitation -->
@@ -1008,7 +991,7 @@
 
     <div class="gallery wrap">
       <div class="gallery-stage">
-      <figure data-ratio="2/3"><img src="images/actual/3F17DAAE-web.jpg" alt="Jeremie and Michelle walking hand in hand across the field" loading="lazy"></figure>
+      <figure data-ratio="2/3" data-cover><img src="images/actual/ADCEED27-web.jpg" alt="Jeremie and Michelle relaxing in camp chairs on a grassy hill under a wide sky" loading="lazy"></figure>
       <figure data-ratio="2/3"><img src="images/actual/DSCF3952-web.jpg" alt="Jeremie lifting Michelle into the air" loading="lazy"></figure>
       <figure data-ratio="3/2" class="wide"><img src="images/actual/DSCF3590-web.jpg" alt="Jeremie and Michelle with their arms flung wide in front of the trees" loading="lazy"></figure>
       <figure data-ratio="3/2" class="wide"><img src="images/actual/31536123-web.jpg" alt="Jeremie and Michelle mid-stride on a hilltop under a blue sky" loading="lazy"></figure>
@@ -1269,7 +1252,7 @@
   </div>
 
   <footer>
-    <p class="script">Jeremie &amp; Michelle</p>
+    <p class="script">Jeremie<span class="and">&amp;</span>Michelle</p>
     <p style="margin-top: 0.75rem">If you have any questions, please get in contact with us.<br>We can't wait to celebrate with you.</p>
   </footer>
 
@@ -1523,7 +1506,8 @@
       const clamp = (v) => Math.min(1, Math.max(0, v));
       const easeOut = (t) => 1 - Math.pow(1 - t, 3);
       const easeInOut = (t) => t < 0.5 ? 4 * t * t * t : 1 - Math.pow(-2 * t + 2, 3) / 2;
-      let geo = null;
+      let geo = null, frame = 8;
+      const cover = figs[0].hasAttribute('data-cover') ? figs[0] : null;
       let shown = 0;      // progress currently drawn
       let raf = 0;
 
@@ -1567,6 +1551,7 @@
             const f = figs[i], fw = ratio(f) * rh;
             f.style.zIndex = i + 1;
             Object.assign(f.style, { left: x + 'px', top: y + 'px', width: fw + 'px', height: rh + 'px' });
+            f._g = { x, y, w: fw, h: rh };
             f._dx = W / 2 - (x + fw / 2);
             f._dy = H / 2 - 24 - (y + rh / 2);
             // On the stack: portraits up to 80% of the screen height, landscapes up to
@@ -1588,7 +1573,8 @@
         STACK = dealLen / scrollLen;
         GRID_AT = (dealLen + spreadLen) / scrollLen;
         gallery.style.height = (H + scrollLen) + 'px';
-        geo = { H, Wg, navH, scrollLen, overflow };
+        geo = { H, W, Wg, navH, scrollLen, overflow };
+        frame = Math.max(4, Math.round(minSide * 0.045));
         render();
       };
 
@@ -1605,6 +1591,20 @@
           const a = i === 0 ? 1 : easeOut(clamp(k - (i - 1)));   // this photo's arrival
           const m = easeInOut(clamp(k - i));                      // slid aside once the next lands
           const s = easeInOut(clamp(q * 1.35 - i * 0.07));        // staggered spread
+          if (f === cover) {
+            // Full-bleed until the spread, then eases into its grid slot
+            const e = 1 - s, g = f._g, W = geo.W, H = geo.H;
+            Object.assign(f.style, {
+              left: g.x * s + 'px', top: g.y * s + 'px',
+              width: (g.w + (W - g.w) * e) + 'px', height: (g.h + (H - g.h) * e) + 'px',
+              borderWidth: (frame * s) + 'px'
+            });
+            f.style.transform = `translate3d(0, ${-pan}px, 0)`;
+            f.style.opacity = 1;
+            f.classList.toggle('as-cover', s < 1);
+            bgs[i].style.visibility = 'hidden';
+            return;
+          }
           const [sx, sy, srot] = scatter[i] || [0, 0, 0];
           const rise = (1 - a) * geo.H * 0.9;                     // slides up from below
           const rot = ((tilt[i % tilt.length] + (1 - a) * 14) * (1 - m) + srot * m) * (1 - s);
@@ -1625,6 +1625,8 @@
         count.style.opacity = 1 - clamp(q * 4);
         hint.style.opacity = 1 - clamp(k * 2.5);
         gallery.classList.toggle('spread', q >= 1);
+        // Light counter while it sits on the full-bleed cover photo
+        count.classList.toggle('on-photo', !!cover && k < 0.5);
       };
 
       // Scroll position for a given progress, and for each photo / the grid
