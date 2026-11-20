@@ -143,6 +143,8 @@
     #envelope > :nth-child(3) { animation-delay: 0.4s; }
     #envelope > :nth-child(4) { animation-delay: 0.6s; }
     #envelope .script { font-size: clamp(1.9rem, 7vw, 3.25rem); }
+    /* Names just a touch smaller than "You are invited!" */
+    #envelope .eyebrow { font-size: clamp(1.2rem, 4.7vw, 2.35rem); margin-bottom: 0.5rem; }
 
     /* ---------- Nav ---------- */
     nav {
@@ -186,31 +188,17 @@
     .hero-bg {
       position: absolute;
       inset: 0;
-      /* Original wide field shot, zoomed 1.6x on the couple via background-size
-         (drawn at full quality, no stretching). Anchored to the bottom edge because
-         the couple stands low in the photo; names sit up top over the trees.
-         Sizes below = "cover" x 1.6, picked by screen shape. */
-      background: url("images/svMNil1Q.jpg") 51% 100% / 160% auto no-repeat;
-    }
-    @media (max-aspect-ratio: 3/2) {
-      /* Screens narrower than the photo: cover is set by height */
-      .hero-bg { background-size: auto 160%; }
+      /* Portrait shot of the couple in front of the trees. On wide screens the
+         photo is cropped to a band around their faces with the trees above for
+         the names; on portrait screens the whole frame shows. */
+      background: url("images/actual/B528EC89-D1C7-4C31-A3A7-11EB31201D80-10413-000003429965EA0F.jpg") 50% 52% / cover no-repeat;
     }
     @media (max-aspect-ratio: 4/5) {
-      /* Portrait screens: vertical version of the same scene, zoomed the same way */
-      .hero-bg {
-        background-image: url("images/LDNf_rVU.jpg");
-        background-position: 48.5% 100%;
-        background-size: auto 160%;
-      }
+      .hero-bg { background-position: 50% 100%; }
       /* Phones: smaller, higher names so they clear the couple's heads */
       .hero { padding-top: 3.5rem; }
-      .hero .script { font-size: clamp(1.5rem, 6.8vw, 2.2rem); }
-      .hero .date { margin-top: 1rem; font-size: 1.5rem; }
-    }
-    @media (max-aspect-ratio: 4/5) and (min-aspect-ratio: 2/3) {
-      /* Portrait screens wider than the vertical photo: cover is set by width */
-      .hero-bg { background-size: 160% auto; }
+      .hero .script { font-size: clamp(1.8rem, 8.2vw, 2.6rem); }
+      .hero .date { font-size: 1.5rem; }
     }
 
     /* Arched portrait in the invitation */
@@ -225,10 +213,10 @@
     }
     .arch img {
       width: 100%; height: 100%;
-      object-fit: cover; object-position: center 70%;
-      /* Zoom to the couple: head to hips */
-      scale: 1.7;
-      transform-origin: 52% 55%;
+      object-fit: cover; object-position: center 40%;
+      /* Slight zoom toward their faces */
+      scale: 1.15;
+      transform-origin: 55% 40%;
     }
 
     /* Full-width photo break between sections */
@@ -243,10 +231,15 @@
     }
     .hero > :not(.hero-bg) { position: relative; z-index: 2; }
     .hero .eyebrow { color: var(--greige); }
+    /* "We're getting married" sits higher, apart from the names */
+    .hero .eyebrow:not(.place) { margin: -2.5rem 0 4rem; }
+    @media (max-aspect-ratio: 4/5) {
+      .hero .eyebrow:not(.place) { margin: -1.5rem 0 2.75rem; }
+    }
     .hero .tbd { color: var(--peach); }
     /* Names stacked like the invitation: JEREMIE / & / MICHELLE */
     .hero .script {
-      font-size: clamp(1.5rem, 6.8vw, 3.2rem);
+      font-size: clamp(1.8rem, 8.2vw, 3.8rem);
       letter-spacing: 0.25em;
       line-height: 1.25;
       margin-right: -0.25em; /* offset trailing letter-spacing so lines stay centered */
@@ -258,17 +251,18 @@
       font-size: 0.85em;
       margin: 0.1em 0;
     }
+    /* Date + address pinned to the bottom of the hero */
     .hero .date {
-      margin-top: 2rem;
+      margin-top: auto;
       font-family: var(--serif);
       font-size: clamp(1.75rem, 5vw, 2.5rem);
       letter-spacing: 0.3em;
     }
+    .hero .date, .hero .place { text-shadow: 0 1px 12px rgba(50,55,39,0.6); }
     .hero .place { margin-top: 0.5rem; }
     /* Wide screens: names on one line so they stay above the couple */
     @media (min-width: 700px) {
-      .hero .script { font-size: clamp(2rem, 3.6vw, 3.2rem); }
-      .hero .date { margin-top: 1rem; }
+      .hero .script { font-size: clamp(2.4rem, 4.3vw, 3.8rem); }
     }
 
     /* ---------- Sections ---------- */
@@ -537,31 +531,193 @@
     }
     .card:hover .card-img img { transform: scale(1.05); }
 
-    /* Single venue card: two photos side by side */
+    /* Single venue card: one photo of the farm house */
     .venue-card { max-width: 760px; margin: 3rem auto 0; }
-    .venue-photos {
-      display: grid;
-      grid-template-columns: 3fr 2fr;
-      gap: 6px;
-      aspect-ratio: 16 / 7;
-    }
-    .venue-photos img { min-width: 0; }
+    .venue-photos { aspect-ratio: 16 / 9; }
     .venue-note { max-width: 440px; font-size: 0.95rem; color: var(--muted); }
     @media (max-width: 560px) {
-      .venue-photos { grid-template-columns: 1fr; aspect-ratio: 4 / 3; }
-      .venue-photos img + img { display: none; }
+      .venue-photos { aspect-ratio: 4 / 3; }
     }
 
     /* Gallery */
-    .gallery {
+    .gallery { margin-top: 3rem; }
+    .gallery-stage {
       display: grid;
       grid-template-columns: repeat(3, 1fr);
       gap: 0.75rem;
-      margin-top: 3rem;
     }
-    .gallery figure { overflow: hidden; aspect-ratio: 3 / 4; }
-    .gallery figure:nth-child(3n+2) { margin-top: 2.5rem; }
+    /* Photos framed like ivory prints */
+    .gallery figure {
+      overflow: hidden;
+      aspect-ratio: 3 / 4;
+      background: var(--ivory);
+      border: var(--frame, 8px) solid var(--ivory);
+      outline: 1px solid rgba(50, 55, 39, 0.1);
+      box-shadow: 0 6px 18px rgba(50, 55, 39, 0.12);
+    }
     .gallery figure:hover img { transform: scale(1.06); }
+    .gallery-count { display: none; }
+
+    /* Pinned gallery (JS): the stage locks on screen while photos are dealt
+       onto a stack one per scroll step, then the stack spreads into a grid. */
+    .gallery.pinned { position: relative; max-width: none; margin-left: -1rem; margin-right: -1rem; }
+    .gallery.pinned .gallery-stage {
+      display: block;
+      position: sticky;
+      top: var(--nav-h, 0px);
+      height: calc(100vh - var(--nav-h, 0px));
+      height: calc(100svh - var(--nav-h, 0px));
+      overflow: hidden;
+    }
+    /* Blurred backdrop: the current photo, softly crossfading as the stack grows */
+    .gallery-bg {
+      position: absolute;
+      inset: 0;
+      z-index: 0;
+      pointer-events: none;
+      -webkit-mask-image: linear-gradient(180deg, transparent 0%, #000 14%, #000 86%, transparent 100%);
+      mask-image: linear-gradient(180deg, transparent 0%, #000 14%, #000 86%, transparent 100%);
+    }
+    .gallery-bg i {
+      position: absolute;
+      inset: -6px;
+      background: center / cover no-repeat;
+      filter: blur(2px) saturate(1.1);
+      opacity: 0;
+      will-change: opacity;
+    }
+    .gallery-bg::after {
+      content: "";
+      position: absolute;
+      inset: 0;
+      background: radial-gradient(ellipse at center, rgba(252, 245, 234, 0.2) 0%, rgba(252, 245, 234, 0.55) 100%);
+    }
+    .gallery.pinned .gallery-count { z-index: 50; }
+    .gallery.pinned figure {
+      position: absolute;
+      margin: 0;
+      aspect-ratio: auto;
+      border-radius: 3px;
+      transform-origin: center;
+      will-change: transform, opacity;
+      box-shadow: 0 14px 34px rgba(50, 55, 39, 0.28);
+    }
+    .gallery.pinned:not(.spread) figure:hover img { transform: none; }
+    .gallery.pinned .gallery-count {
+      display: block;
+      position: absolute;
+      left: 0; right: 0; bottom: 1.25rem;
+      font-family: var(--serif);
+      font-size: 1.15rem;
+      letter-spacing: 0.3em;
+      color: var(--olive-deep);
+      text-shadow: 0 1px 10px rgba(252, 245, 234, 0.9);
+      pointer-events: none;
+    }
+    .gallery-count .dots { display: flex; justify-content: center; gap: 10px; margin-top: 0.6rem; }
+    .gallery-count .dots i {
+      width: 10px; height: 10px; border-radius: 50%;
+      background: currentColor; opacity: 0.25;
+      transition: opacity 0.4s ease, transform 0.4s ease;
+    }
+    .gallery-count .dots i.on { opacity: 0.9; transform: scale(1.3); }
+    /* Dots are tappable: jump straight to that photo */
+    .gallery-count .dots button {
+      all: unset;
+      display: grid; place-items: center;
+      width: 22px; height: 22px;
+      cursor: pointer;
+      pointer-events: auto;
+      -webkit-tap-highlight-color: transparent;
+    }
+    .gallery-count .dots button:focus-visible { outline: 2px solid var(--olive); outline-offset: 1px; border-radius: 50%; }
+    .gallery-count .dots { gap: 2px; }
+    .gallery-hint {
+      font-family: var(--sans);
+      font-size: 0.7rem;
+      letter-spacing: 0.25em;
+      text-transform: uppercase;
+      margin-bottom: 0.5rem;
+      transition: opacity 0.4s ease;
+    }
+    .gallery-hint::after {
+      content: "";
+      display: block;
+      width: 1px; height: 18px;
+      margin: 0.4rem auto 0;
+      background: currentColor;
+      animation: hintDrop 1.6s ease-in-out infinite;
+      transform-origin: top;
+    }
+    @keyframes hintDrop {
+      0% { transform: scaleY(0); opacity: 0; }
+      40% { transform: scaleY(1); opacity: 1; }
+      100% { transform: scaleY(1) translateY(10px); opacity: 0; }
+    }
+
+    /* Lightbox: tap a gallery photo to view it large */
+    .gallery figure { cursor: zoom-in; }
+    .gallery figure:focus-visible { outline: 2px solid var(--olive); outline-offset: 3px; }
+    .lightbox {
+      position: fixed;
+      inset: 0;
+      z-index: 6000;
+      display: grid;
+      place-items: center;
+      background: rgba(30, 33, 23, 0.92);
+      opacity: 0;
+      visibility: hidden;
+      transition: opacity 0.35s ease, visibility 0s linear 0.35s;
+      -webkit-tap-highlight-color: transparent;
+    }
+    .lightbox.open { opacity: 1; visibility: visible; transition: opacity 0.35s ease; }
+    .lightbox figure {
+      margin: 0;
+      display: grid;
+      justify-items: center;
+      max-width: 100%;
+      transform: scale(0.94);
+      transition: transform 0.45s cubic-bezier(.2,.7,.2,1);
+    }
+    .lightbox.open figure { transform: none; }
+    .lightbox img {
+      display: block;
+      max-width: min(92vw, 1400px);
+      max-height: calc(100vh - 7rem);
+      max-height: calc(100svh - 7rem);
+      width: auto; height: auto;
+      border: 6px solid var(--ivory);
+      box-shadow: 0 20px 60px rgba(0, 0, 0, 0.45);
+      transition: opacity 0.2s ease, transform 0.2s ease;
+      user-select: none;
+      -webkit-user-drag: none;
+    }
+    .lightbox img.swap { opacity: 0; transform: translateX(var(--swap-x, 0)); }
+    .lightbox button {
+      position: absolute;
+      display: grid; place-items: center;
+      width: 48px; height: 48px;
+      border: 1px solid rgba(255, 250, 243, 0.3);
+      border-radius: 50%;
+      background: rgba(255, 250, 243, 0.08);
+      color: var(--ivory);
+      padding: 0;
+      cursor: pointer;
+      transition: background 0.2s ease;
+    }
+    .lightbox button svg { display: block; }
+    .lightbox button:hover { background: rgba(255, 250, 243, 0.2); }
+    .lightbox button:focus-visible { outline: 2px solid var(--peach); outline-offset: 2px; }
+    .lightbox .lb-close { top: 1rem; right: 1rem; }
+    .lightbox .lb-prev { left: 1rem; top: 50%; transform: translateY(-50%); }
+    .lightbox .lb-next { right: 1rem; top: 50%; transform: translateY(-50%); }
+    @media (max-width: 600px) {
+      /* Phones: arrows sit below the photo; swiping also works */
+      .lightbox .lb-prev, .lightbox .lb-next { top: auto; bottom: 1rem; transform: none; }
+      .lightbox .lb-prev { left: calc(50% - 60px); }
+      .lightbox .lb-next { right: calc(50% - 60px); }
+      .lightbox img { max-height: calc(100vh - 11rem); max-height: calc(100svh - 11rem); border-width: 4px; }
+    }
 
     /* Timeline */
     .timeline {
@@ -642,44 +798,6 @@
     summary::after { transition: transform 0.3s; }
     details[open] summary::after { transform: rotate(180deg); }
 
-    /* RSVP */
-    .deadline {
-      font-family: var(--serif);
-      font-size: 1.5rem;
-      letter-spacing: 0.12em;
-      text-transform: uppercase;
-      margin-top: 1rem;
-    }
-    form {
-      display: grid;
-      gap: 1rem;
-      margin-top: 2.5rem;
-      text-align: left;
-    }
-    label {
-      display: grid;
-      gap: 0.35rem;
-      font-size: 0.72rem;
-      letter-spacing: 0.18em;
-      text-transform: uppercase;
-    }
-    input, select, textarea {
-      font: inherit;
-      font-size: 1rem;
-      letter-spacing: normal;
-      text-transform: none;
-      padding: 0.8rem;
-      border: 1px solid var(--greige);
-      border-radius: 0;
-      background: var(--ivory);
-      color: var(--olive-deep);
-    }
-    input:focus, select:focus, textarea:focus {
-      outline: 2px solid var(--peach);
-      outline-offset: 1px;
-    }
-    form .btn { justify-self: center; margin-top: 0.5rem; }
-
     footer {
       /* Closing shot: the two of them walking toward the trees.
          Extra bottom padding keeps the text above the couple. */
@@ -742,9 +860,7 @@
       .pair, .cols { grid-template-columns: 1fr; }
       .trio { grid-template-columns: 1fr 1fr; }
       section { padding: 4rem 1rem; }
-      .gallery { grid-template-columns: 1fr 1fr; }
-      .gallery figure:nth-child(3n+2) { margin-top: 0; }
-      .gallery figure:nth-child(even) { margin-top: 2.5rem; }
+      .gallery-stage { grid-template-columns: 1fr 1fr; }
     }
   </style>
 </head>
@@ -764,7 +880,6 @@
     <a href="#timeline">Timeline</a>
     <a href="#attire">Attire</a>
     <a href="#faqs">FAQs</a>
-    <a href="#rsvp">RSVP</a>
   </nav>
 
   <!-- 2. Hero -->
@@ -778,16 +893,16 @@
   <!-- 3. Save the date / invitation -->
   <section id="invitation" class="band-olive invite">
     <div class="narrow">
-      <div class="arch"><img src="images/2lh4lxid.jpg" alt="Michelle resting her head on Jeremie's shoulder" loading="lazy"></div>
+      <div class="arch"><img src="images/actual/DSCF3405-web.jpg" alt="Michelle with her arms around Jeremie, both smiling" loading="lazy"></div>
       <p class="eyebrow">Save the date</p>
-      <p class="lede">Together with their families,<br>we invite you to join the wedding of</p>
-      <p class="names">Jeremie + Michelle</p>
+      <p class="lede">Together with our families,<br>we invite you to join the wedding of</p>
+      <p class="names">Jeremie &amp; Michelle</p>
       <div class="divider"></div>
       <p class="when">On Saturday, the 20th of February 2027<br>4:30 in the afternoon</p>
       <div class="pair single">
         <div>
           <p class="eyebrow label">Ceremony &amp; Reception</p>
-          <p>Lily Vacation Farmhouse</p>
+          <p>Lily Vacation Farm House</p>
         </div>
       </div>
     </div>
@@ -805,12 +920,15 @@
     </div>
 
     <div class="gallery wrap">
-      <figure><img src="images/03qk3yZh.jpg" alt="Jeremie twirling Michelle in the field" loading="lazy"></figure>
-      <figure><img src="images/T2LSJY-p.jpg" alt="Michelle laughing beside Jeremie" loading="lazy"></figure>
-      <figure><img src="images/_q8VT-Jp.jpg" alt="Jeremie and Michelle looking at each other" loading="lazy"></figure>
-      <figure><img src="images/gLduw9Sn.jpg" alt="Jeremie and Michelle walking hand in hand" loading="lazy"></figure>
-      <figure><img src="images/AkBC0i4j.jpg" alt="Jeremie and Michelle embracing in a field" loading="lazy"></figure>
-      <figure><img src="images/EcdhoMq2.jpg" alt="Jeremie and Michelle walking together" loading="lazy"></figure>
+      <div class="gallery-stage">
+      <figure data-ratio="2/3"><img src="images/actual/3F17DAAE-50CF-4298-9C0E-9F2D22FAEFFB-9851-000002F07B214DD6.jpg" alt="Jeremie and Michelle walking hand in hand across the field" loading="lazy"></figure>
+      <figure data-ratio="2/3"><img src="images/actual/DSCF3952-web.jpg" alt="Jeremie lifting Michelle into the air" loading="lazy"></figure>
+      <figure data-ratio="3/2" class="wide"><img src="images/actual/DSCF3590-web.jpg" alt="Jeremie and Michelle with their arms flung wide in front of the trees" loading="lazy"></figure>
+      <figure data-ratio="3/2" class="wide"><img src="images/actual/31536123-2543-4827-B5E0-142316EBDC89-10413-00000347614FEB8E.jpg" alt="Jeremie and Michelle mid-stride on a hilltop under a blue sky" loading="lazy"></figure>
+      <figure data-ratio="2/3"><img src="images/actual/E8DDB53E-E534-4CD1-8AAE-AE22DDA0141D-10413-00000347CD6A371B.jpg" alt="Jeremie and Michelle in sunglasses, sitting on a grassy hill" loading="lazy"></figure>
+      <figure data-ratio="2/3"><img src="images/actual/DSCF3149-web.jpg" alt="Jeremie and Michelle walking together beneath tall trees" loading="lazy"></figure>
+      <div class="gallery-count"><p class="gallery-hint" aria-hidden="true">Scroll to flip through</p><span aria-hidden="true"></span><div class="dots"></div></div>
+      </div>
     </div>
   </section>
 
@@ -818,7 +936,7 @@
   <section id="entourage" class="band-greige">
     <div class="wrap">
       <h2>Entourage</h2>
-      <p class="eyebrow" style="margin-top: 0.75rem">Saturay &ndash; Garrote</p>
+      <p class="eyebrow" style="margin-top: 0.75rem; font-size: clamp(1rem, 3vw, 1.25rem)">Saturay &ndash; Garrote</p>
 
       <div class="role">
         <h3>Parents of the Couple</h3>
@@ -890,14 +1008,12 @@
       <h2>The Venue</h2>
       <div class="venue-card card has-img">
         <div class="card-img venue-photos">
-          <img src="images/venue/farmhouse.jpg" alt="The farmhouse under large acacia trees" loading="lazy">
-          <img src="images/venue/grounds.jpg" alt="Tree-shaded lawn at Lily Vacation Farmhouse" loading="lazy">
+          <img src="images/venue/farmhouse.jpg" alt="The farm house under large acacia trees" loading="lazy">
         </div>
         <p class="eyebrow">Ceremony 4:30 PM &middot; Reception 6:30 PM</p>
-        <h3>Lily Vacation Farmhouse</h3>
+        <h3>Lily Vacation Farm House</h3>
         <p class="addr">0060 Companario Street, Sitio Campanario, Pagkalinawan, Jalajala, Rizal</p>
         <p class="venue-note">The ceremony and reception are both held here, so there's no need to travel between venues.</p>
-        <a class="btn" href="https://www.google.com/maps/search/?api=1&amp;query=Lily+Vacation+Farm+House%2C+Jalajala%2C+Rizal" target="_blank" rel="noopener">View map</a>
       </div>
 
       <!-- Area map: Leaflet, drawn from OpenStreetMap data (js/map-data.js) in the site palette -->
@@ -906,10 +1022,10 @@
         <h3 class="map-title">Jalajala, by the shores of Laguna de Bay</h3>
         <div class="map-frame">
           <div id="area-map" role="region" aria-label="Map of Jalajala, Rizal, with nearby towns and the venue marked">
-            <p class="map-fallback">Lily Vacation Farmhouse &middot; Sitio Campanario, Pagkalinawan, Jalajala, Rizal</p>
+            <p class="map-fallback">Lily Vacation Farm House &middot; Sitio Campanario, Pagkalinawan, Jalajala, Rizal</p>
           </div>
         </div>
-        <p class="map-note">Pin marks Sitio Campanario, Pagkalinawan. Use the map button for turn-by-turn directions.</p>
+        <p class="map-note">Pin marks Sitio Campanario, Pagkalinawan. Tap "Get directions" for turn-by-turn directions.</p>
         <a class="btn" href="https://www.google.com/maps/dir/?api=1&amp;destination=Lily+Vacation+Farm+House%2C+Jalajala%2C+Rizal" target="_blank" rel="noopener">Get directions</a>
       </div>
     </div>
@@ -920,7 +1036,7 @@
     <div class="narrow">
       <h2>Timeline</h2>
       <ol class="timeline">
-        <li><time class="tbd">Arrival time</time><span>Arrival</span></li>
+        <li><time>3:30 PM</time><span>Arrival</span></li>
         <li><time>4:30 PM</time><span>Ceremony</span></li>
         <li><time>5:30 PM</time><span>Cocktail Hour</span></li>
         <li><time>6:30 PM</time><span>Reception</span><br><small>Grand entrance, first dance, speeches &amp; cake cutting</small></li>
@@ -929,7 +1045,7 @@
 
       <div class="divider" style="margin-top: 4rem"></div>
       <p class="script" style="font-size: 1.75rem; color: var(--olive)">Plan your arrival</p>
-      <p class="lede">To ensure a smooth flow of the ceremony, we kindly ask our guests to arrive at <span class="tbd">arrival time</span> as we begin the ceremony at 4:30 PM. We respectfully request your punctual presence for this special moment.</p>
+      <p class="lede">To ensure a smooth flow of the ceremony, we kindly ask our guests to arrive at 3:30 PM as we begin the ceremony at 4:30 PM. We respectfully request your punctual presence for this special moment.</p>
     </div>
   </section>
 
@@ -947,9 +1063,9 @@
         </div>
         <div class="card">
           <p class="eyebrow">Nearby &middot; Brgy. Lubo</p>
-          <h3>KabinA sa Aplaya</h3>
-          <p class="addr">RJFLn Resort &middot; Mabini St., Brgy. Lubo, Jalajala, Rizal<br>A-frame cabins and a pool overlooking Laguna de Bay</p>
-          <a class="btn" href="https://www.facebook.com/kabinasaaplaya/" target="_blank" rel="noopener">Book here</a>
+          <h3>K3R Lakeside Resort</h3>
+          <p class="addr">Brgy. Lubo, Jalajala, Rizal<br>Infinity pool, kubo over the water and a bamboo walkway on Laguna de Bay</p>
+          <a class="btn" href="https://www.google.com/maps/search/?api=1&amp;query=K3R+Lakeside+Resort%2C+Lubo%2C+Jalajala%2C+Rizal" target="_blank" rel="noopener">Book here</a>
         </div>
         <div class="card">
           <p class="eyebrow">Nearby &middot; Brgy. Lubo</p>
@@ -1009,16 +1125,16 @@
       <div class="faq">
         <details>
           <summary>What time should I arrive?</summary>
-          <p>We would love for you to arrive and be comfortably seated at Lily Vacation Farmhouse by <span class="tbd">arrival time</span>, as the ceremony will begin promptly at 4:30 PM.</p>
+          <p>We would love for you to arrive and be comfortably seated at Lily Vacation Farm House by 3:30 PM, as the ceremony will begin promptly at 4:30 PM.</p>
           <p>We'd appreciate it if you could join us at the ceremony, not just at the reception. It's the most important part of our wedding, and sharing that moment with you would mean so much.</p>
         </details>
         <details>
           <summary>Where are the ceremony and the reception taking place?</summary>
-          <p>Both the ceremony and the reception will be held at Lily Vacation Farmhouse, 0060 Companario Street, Sitio Campanario, Pagkalinawan, Jalajala, Rizal. See the <a href="#venues">venue map</a> above.</p>
+          <p>Both the ceremony and the reception will be held at Lily Vacation Farm House, 0060 Companario Street, Sitio Campanario, Pagkalinawan, Jalajala, Rizal. See the <a href="#venues">venue map</a> above.</p>
         </details>
         <details>
           <summary>What happens after the ceremony?</summary>
-          <p>Stay with us on the farmhouse grounds for cocktail hour from 5:30 PM. The reception begins at 6:30 PM.</p>
+          <p>Stay with us on the farm house grounds for cocktail hour from 5:30 PM. The reception begins at 6:30 PM.</p>
         </details>
         <details>
           <summary>Is there a dress code?</summary>
@@ -1046,7 +1162,7 @@
         </details>
         <details>
           <summary>How can I RSVP?</summary>
-          <p>We'd love to hear from you! Kindly RSVP online through the <a href="#rsvp">form below</a> or by contacting <span class="tbd">Jeremie (phone)</span> or <span class="tbd">Michelle (phone)</span>. We'll be waiting for your confirmation until <span class="tbd">deadline date</span>.</p>
+          <p>We'd love to hear from you! Kindly RSVP by contacting <span class="tbd">Jeremie (phone)</span> or <span class="tbd">Michelle (phone)</span>. We'll be waiting for your confirmation until <span class="tbd">deadline date</span>.</p>
         </details>
         <details>
           <summary>For additional questions, who should I contact?</summary>
@@ -1056,38 +1172,14 @@
     </div>
   </section>
 
-  <!-- 13. RSVP -->
-  <section id="rsvp" class="band-ivory">
-    <div class="narrow">
-      <p class="script" style="font-size: 1.75rem; color: var(--sage)">Kindly</p>
-      <h2>RSVP</h2>
-      <p class="lede">We have reserved a special seat for you, and we hope to share this beautiful moment with you. Please let us know if you'll be there as we say &ldquo;I do&rdquo; by confirming your attendance on or before</p>
-      <p class="deadline tbd">Deadline date (weekday)</p>
-
-      <form id="rsvp-form">
-        <label>Full name
-          <input type="text" name="name" autocomplete="name" required>
-        </label>
-        <label>Email
-          <input type="email" name="email" autocomplete="email" required>
-        </label>
-        <label>Will you attend?
-          <select name="attending" required>
-            <option value="">Select one</option>
-            <option value="yes">Joyfully accepts</option>
-            <option value="no">Regretfully declines</option>
-          </select>
-        </label>
-        <label>Number of seats
-          <input type="number" name="seats" min="1" max="10" value="1">
-        </label>
-        <label>Message (optional)
-          <textarea name="message" rows="3"></textarea>
-        </label>
-        <button class="btn" type="submit">Click here to RSVP</button>
-      </form>
-    </div>
-  </section>
+  <div class="lightbox" role="dialog" aria-modal="true" aria-label="Photo viewer" aria-hidden="true">
+    <figure>
+      <img alt="">
+    </figure>
+    <button class="lb-close" type="button" aria-label="Close"><svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 6l12 12M18 6L6 18"/></svg></button>
+    <button class="lb-prev" type="button" aria-label="Previous photo"><svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M15.5 5l-7 7 7 7"/></svg></button>
+    <button class="lb-next" type="button" aria-label="Next photo"><svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M8.5 5l7 7-7 7"/></svg></button>
+  </div>
 
   <footer>
     <p class="script">Jeremie &amp; Michelle</p>
@@ -1103,13 +1195,18 @@
       document.body.classList.add('opened');
     });
 
+    // Gallery pins and animates on scroll unless the visitor prefers reduced motion
+    const gallery = document.querySelector('.gallery');
+    const pinGallery = !!gallery && !matchMedia('(prefers-reduced-motion: reduce)').matches;
+
     // Scroll reveal: fade content up as it enters the viewport,
     // staggering siblings slightly so groups cascade in.
     const revealTargets = document.querySelectorAll([
       '.arch', 'section h2', 'section h3', 'section .script', 'section .eyebrow', 'section .lede',
-      '.names', '.when', '.divider', '.pair > div', '.countdown > div', '.gallery figure',
+      '.names', '.when', '.divider', '.pair > div', '.countdown > div',
+      ...(pinGallery ? [] : ['.gallery figure']),
       '.role li', '.card', '.timeline li', '.swatches i', '.attire-group > p', '.note',
-      'details', '.deadline', 'form > *', 'footer > *'
+      'details', 'footer > *'
     ].join(','));
     const siblingCount = new Map();
     revealTargets.forEach((el) => {
@@ -1145,14 +1242,262 @@
       setInterval(tick, 1000);
     }
 
-    // RSVP placeholder: no backend yet, so just log it.
-    document.getElementById('rsvp-form').addEventListener('submit', (e) => {
-      e.preventDefault();
-      const data = Object.fromEntries(new FormData(e.target));
-      console.log('RSVP:', data);
-      alert('Thank you, ' + data.name + '!');
-      e.target.reset();
-    });
+    // Lightbox: tap/click a gallery photo to view it large. Arrows, swipe or
+    // arrow keys move between photos; Esc, the X or tapping outside closes it.
+    (() => {
+      const box = document.querySelector('.lightbox');
+      const figs = [...document.querySelectorAll('.gallery figure')];
+      if (!box || !figs.length) return;
+      const img = box.querySelector('img');
+      let idx = 0, lastFocus = null, swapTimer = 0;
+
+      const fill = () => {
+        const src = figs[idx].querySelector('img');
+        img.src = src.currentSrc || src.src;
+        img.alt = src.alt;
+      };
+      const show = (i, dir = 0) => {
+        idx = (i + figs.length) % figs.length;
+        clearTimeout(swapTimer);
+        if (!dir) { img.classList.remove('swap'); fill(); return; }
+        // Slide the old photo out, then the new one in from the other side
+        img.style.setProperty('--swap-x', (-dir * 28) + 'px');
+        img.classList.add('swap');
+        swapTimer = setTimeout(() => {
+          fill();
+          img.style.setProperty('--swap-x', (dir * 28) + 'px');
+          requestAnimationFrame(() => requestAnimationFrame(() => img.classList.remove('swap')));
+        }, 200);
+      };
+      const open = (i) => {
+        lastFocus = document.activeElement;
+        show(i);
+        box.classList.add('open');
+        box.setAttribute('aria-hidden', 'false');
+        document.body.classList.add('locked');
+        box.querySelector('.lb-close').focus({ preventScroll: true });
+      };
+      const close = () => {
+        box.classList.remove('open');
+        box.setAttribute('aria-hidden', 'true');
+        document.body.classList.remove('locked');
+        if (lastFocus) lastFocus.focus({ preventScroll: true });
+      };
+
+      figs.forEach((f, i) => {
+        f.tabIndex = 0;
+        f.setAttribute('role', 'button');
+        f.setAttribute('aria-label', 'View photo: ' + (f.querySelector('img').alt || i + 1));
+        f.addEventListener('click', () => open(i));
+        f.addEventListener('keydown', (e) => {
+          if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); open(i); }
+        });
+      });
+      box.querySelector('.lb-close').addEventListener('click', close);
+      box.querySelector('.lb-prev').addEventListener('click', () => show(idx - 1, -1));
+      box.querySelector('.lb-next').addEventListener('click', () => show(idx + 1, 1));
+      box.addEventListener('click', (e) => { if (e.target === box) close(); });
+      document.addEventListener('keydown', (e) => {
+        if (!box.classList.contains('open')) return;
+        if (e.key === 'Escape') close();
+        else if (e.key === 'ArrowLeft') show(idx - 1, -1);
+        else if (e.key === 'ArrowRight') show(idx + 1, 1);
+        else if (e.key === 'Tab') {   // keep focus inside the viewer
+          const btns = [...box.querySelectorAll('button')];
+          const at = btns.indexOf(document.activeElement);
+          e.preventDefault();
+          btns[(at + (e.shiftKey ? -1 : 1) + btns.length) % btns.length].focus();
+        }
+      });
+      // Swipe left/right on phones
+      let sx = null, sy = null;
+      box.addEventListener('touchstart', (e) => { sx = e.touches[0].clientX; sy = e.touches[0].clientY; }, { passive: true });
+      box.addEventListener('touchend', (e) => {
+        if (sx === null) return;
+        const dx = e.changedTouches[0].clientX - sx, dy = e.changedTouches[0].clientY - sy;
+        sx = null;
+        if (Math.abs(dx) > 50 && Math.abs(dx) > Math.abs(dy) * 1.5) show(idx + (dx < 0 ? 1 : -1), dx < 0 ? 1 : -1);
+      }, { passive: true });
+    })();
+
+    // Pinned gallery: while the stage is locked on screen, each scroll step deals
+    // the next photo onto a tilted stack; at the end the stack spreads out into a
+    // symmetrical grid (3 columns, 2 on phones).
+    if (pinGallery) {
+      gallery.classList.add('pinned');
+      const stage = gallery.querySelector('.gallery-stage');
+      const figs = [...stage.querySelectorAll('figure')];
+      const N = figs.length;
+      const countText = stage.querySelector('.gallery-count span');
+      const count = stage.querySelector('.gallery-count');
+      const dotsBox = stage.querySelector('.gallery-count .dots');
+      const hint = stage.querySelector('.gallery-hint');
+      const dots = figs.map((f, i) => {
+        const b = dotsBox.appendChild(document.createElement('button'));
+        b.type = 'button';
+        b.setAttribute('aria-label', 'Show photo ' + (i + 1));
+        return b.appendChild(document.createElement('i'));
+      });
+      figs.forEach((f) => { const img = f.querySelector('img'); if (img) img.loading = 'eager'; });
+
+      // Blurred backdrop, one layer per photo
+      const bgBox = stage.insertBefore(document.createElement('div'), stage.firstChild);
+      bgBox.className = 'gallery-bg';
+      bgBox.setAttribute('aria-hidden', 'true');
+      const bgs = figs.map((f) => {
+        const layer = bgBox.appendChild(document.createElement('i'));
+        layer.style.backgroundImage = `url("${f.querySelector('img').getAttribute('src')}")`;
+        return layer;
+      });
+
+      const tilt = [-5, 4, -2.5, 3.5, -4, 2.5];  // angle of each photo when it lands in the centre
+      // Where each photo slides once the next one lands, like prints scattered on a table:
+      // x, y as a share of the stage, resting angle. The last photo stays in the centre.
+      const scatter = [
+        [-0.33, -0.15, -9], [0.33, -0.13, 7], [-0.31, 0.19, 6],
+        [0.32, 0.2, -6], [0.1, -0.05, 9], [0, 0, 0]
+      ];
+      const SCATTER_SCALE = 0.62;
+      // Scroll distance, in screen heights: per photo, and for the spread into the grid
+      // GRID_HOLD keeps the finished grid pinned on screen for a moment before it scrolls away.
+      // If the grid is taller than the screen (phones), the hold also pans down through it.
+      const PER_PHOTO = 0.38, SPREAD = 0.75, GRID_HOLD = 0.5;
+      let STACK = 0, GRID_AT = 1;   // set in layout(): share spent dealing / where the grid completes
+      const HOLD = 0.05;                         // pause on the full stack before spreading
+      const clamp = (v) => Math.min(1, Math.max(0, v));
+      const easeOut = (t) => 1 - Math.pow(1 - t, 3);
+      const easeInOut = (t) => t < 0.5 ? 4 * t * t * t : 1 - Math.pow(-2 * t + 2, 3) / 2;
+      let geo = null;
+      let shown = 0;      // progress currently drawn
+      let raf = 0;
+
+      const layout = () => {
+        const navH = document.querySelector('nav').offsetHeight;
+        gallery.style.setProperty('--nav-h', navH + 'px');
+        const W = stage.clientWidth, H = stage.clientHeight;
+        const Wg = Math.min(W, 1280);  // grid and scatter stay within this width on big screens
+        const narrow = W < 600;
+        const pad = narrow ? 10 : 20, gap = narrow ? 8 : 16;
+        // Each photo keeps its own shape (data-ratio, width / height), so nothing is cropped.
+        // Grid = justified rows: photos in a row share one height. Mirrored row patterns:
+        // desktop [P P L] / [L P P]; phones, all full width: [P P] / [L] / [L] / [P P]
+        // (taller than the screen; it pans during the hold).
+        const ratio = (f) => { const [w, hh] = (f.dataset.ratio || '3/4').split('/').map(Number); return w / hh; };
+        const rows = narrow ? [[0, 1], [2], [3], [4, 5]] : [[0, 1, 2], [3, 4, 5]];
+        const availW = Wg - pad * 2, availH = H - pad * 2 - 40;
+        let rowHs = rows.map((r) => (availW - gap * (r.length - 1)) / r.reduce((s, i) => s + ratio(figs[i]), 0));
+        const sumH = () => rowHs.reduce((s, x) => s + x, 0) + gap * (rows.length - 1);
+        // Too tall: first shrink the multi-photo rows (down to 70%), keeping the
+        // single full-width landscapes as big as possible; then shrink everything evenly.
+        let excess = narrow ? 0 : sumH() - availH;
+        rows.forEach((r, ri) => {
+          if (r.length < 2 || excess <= 0) return;
+          const cut = Math.min(excess, rowHs[ri] * 0.3);
+          rowHs[ri] -= cut; excess -= cut;
+        });
+        if (!narrow && sumH() > availH) {
+          const k = (availH - gap * (rows.length - 1)) / (sumH() - gap * (rows.length - 1));
+          rowHs = rowHs.map((x) => x * k);
+        }
+        const gridH = rowHs.reduce((s, x) => s + x, 0) + gap * (rows.length - 1);
+        const overflow = Math.max(0, gridH - (H - pad * 2));
+        let y = overflow ? pad : (H - gridH) / 2;
+        let minSide = Infinity;
+        rows.forEach((r, ri) => {
+          const rh = rowHs[ri];
+          const rowW = r.reduce((s, i) => s + ratio(figs[i]) * rh, 0) + gap * (r.length - 1);
+          let x = (W - rowW) / 2;
+          r.forEach((i) => {
+            const f = figs[i], fw = ratio(f) * rh;
+            f.style.zIndex = i + 1;
+            Object.assign(f.style, { left: x + 'px', top: y + 'px', width: fw + 'px', height: rh + 'px' });
+            f._dx = W / 2 - (x + fw / 2);
+            f._dy = H / 2 - 24 - (y + rh / 2);
+            // On the stack: portraits up to 80% of the screen height, landscapes up to
+            // 90% of the width; both capped so they fit the screen.
+            const stackW = ratio(f) > 1
+              ? Math.min(W * 0.9, H * 0.62 * ratio(f))
+              : Math.min(W * 0.86, H * 0.8 * ratio(f));
+            f._ss = stackW / fw;
+            minSide = Math.min(minSide, fw, rh);
+            x += fw + gap;
+          });
+          y += rh + gap;
+        });
+        // Frame width in proportion to the photos, so it reads the same at any size
+        gallery.style.setProperty('--frame', Math.max(4, Math.round(minSide * 0.045)) + 'px');
+        const dealLen = H * PER_PHOTO * (N - 1), spreadLen = H * SPREAD;
+        const holdLen = H * GRID_HOLD + overflow * 1.2;   // extra scroll to pan a tall grid
+        const scrollLen = dealLen + spreadLen + holdLen;
+        STACK = dealLen / scrollLen;
+        GRID_AT = (dealLen + spreadLen) / scrollLen;
+        gallery.style.height = (H + scrollLen) + 'px';
+        geo = { H, Wg, navH, scrollLen, overflow };
+        render();
+      };
+
+      const rawProgress = () => (geo.navH - gallery.getBoundingClientRect().top) / geo.scrollLen;
+
+      const render = () => {
+        if (!geo) return;
+        const p = shown;
+        const k = clamp(p / STACK) * (N - 1);                    // 0 .. N-1: photos dealt
+        const q = clamp((p - STACK - HOLD) / (GRID_AT - STACK - HOLD)); // 0 .. 1: spread
+        // Pan a tall grid up during the hold (leaves a short still moment at each end)
+        const pan = geo.overflow * easeInOut(clamp(((p - GRID_AT) / (1 - GRID_AT) - 0.1) / 0.75));
+        figs.forEach((f, i) => {
+          const a = i === 0 ? 1 : easeOut(clamp(k - (i - 1)));   // this photo's arrival
+          const m = easeInOut(clamp(k - i));                      // slid aside once the next lands
+          const s = easeInOut(clamp(q * 1.35 - i * 0.07));        // staggered spread
+          const [sx, sy, srot] = scatter[i] || [0, 0, 0];
+          const rise = (1 - a) * geo.H * 0.9;                     // slides up from below
+          const rot = ((tilt[i % tilt.length] + (1 - a) * 14) * (1 - m) + srot * m) * (1 - s);
+          const stackScale = f._ss * (1 - (1 - SCATTER_SCALE) * m) * (1 + (1 - a) * 0.08);
+          const scale = stackScale + (1 - stackScale) * s;
+          const tx = (f._dx + sx * geo.Wg * m) * (1 - s);
+          const ty = (f._dy + sy * geo.H * m + rise) * (1 - s) - pan;
+          f.style.transform = `translate3d(${tx}px, ${ty}px, 0) rotate(${rot}deg) scale(${scale})`;
+          f.style.opacity = Math.min(1, a * 2.5);
+          // Backdrop shows the photo currently on top, crossfading between them
+          const o = clamp(1 - Math.abs(k - i));
+          bgs[i].style.opacity = o.toFixed(3);
+          bgs[i].style.visibility = o > 0 ? 'visible' : 'hidden';
+        });
+        const top = Math.min(N, Math.floor(k + 0.5) + 1);
+        countText.textContent = `${String(top).padStart(2, '0')} / ${String(N).padStart(2, '0')}`;
+        dots.forEach((d, i) => d.classList.toggle('on', i < top));
+        count.style.opacity = 1 - clamp(q * 4);
+        hint.style.opacity = 1 - clamp(k * 2.5);
+        gallery.classList.toggle('spread', q >= 1);
+      };
+
+      // Scroll position for a given progress, and for each photo / the grid
+      const scrollFor = (p) => gallery.getBoundingClientRect().top + window.scrollY - geo.navH + p * geo.scrollLen;
+      const stops = () => [...figs.map((f, i) => STACK * i / (N - 1)), GRID_AT];
+      const goTo = (p) => window.scrollTo({ top: scrollFor(p), behavior: 'smooth' });
+
+      // Draw once per frame, straight from the scroll position
+      const tick = () => { raf = 0; shown = clamp(rawProgress()); render(); };
+      window.addEventListener('scroll', () => { if (!raf) raf = requestAnimationFrame(tick); }, { passive: true });
+
+      // Phones resize the viewport when the address bar shows/hides; only redo the
+      // layout for real size changes so the gallery doesn't jump mid-scroll.
+      let lastW = window.innerWidth, lastH = window.innerHeight;
+      window.addEventListener('resize', () => {
+        const w = window.innerWidth, hh = window.innerHeight;
+        if (w === lastW && Math.abs(hh - lastH) < 150) return;
+        lastW = w; lastH = hh;
+        layout();
+      });
+
+      // Dots jump to a photo
+      dots.forEach((d, i) => d.parentElement.addEventListener('click', () => goTo(stops()[i])));
+
+      layout();
+      shown = clamp(rawProgress());
+      render();
+    }
+
   </script>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.css">
   <script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.js"></script>
@@ -1235,11 +1580,11 @@
       }).addTo(map);
 
       L.marker(venue, {
-        title: 'Lily Vacation Farmhouse',
+        title: 'Lily Vacation Farm House',
         icon: L.divIcon({
           className: 'venue-pin',
           iconSize: [0, 0],
-          html: '<span class="ring"></span><span class="dot"></span><span class="tag">Lily Vacation Farmhouse</span>'
+          html: '<span class="ring"></span><span class="dot"></span><span class="tag">Lily Vacation Farm House</span>'
         })
       }).addTo(map).on('click', function () {
         window.open('https://www.google.com/maps/search/?api=1&query=Lily+Vacation+Farm+House%2C+Jalajala%2C+Rizal', '_blank', 'noopener');

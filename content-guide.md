@@ -21,11 +21,11 @@ Fill in with Jeremie & Michelle's info.
 ## 3. Save the Date / Invitation
 
 - "SAVE THE DATE"
-- `{GROOM} + {BRIDE}` (uppercase)
+- `{GROOM} & {BRIDE}` (uppercase)
 - `{City, Province}`
 - Invitation text:
 
-  > Together with their families,
+  > Together with our families,
   >
   > we invite you to join the wedding of
 
@@ -67,7 +67,7 @@ Each role gets a short line explaining it:
 
 | Time | Event |
 |------|-------|
-| `{1:00 PM}` | Arrival |
+| `3:30 PM` | Arrival |
 | `{1:30 PM}` | Processional |
 | `{2:00 PM}` | Ceremony |
 | `{4:00 PM}` | Cocktails |

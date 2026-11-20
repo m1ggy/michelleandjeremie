@@ -37,14 +37,14 @@ Slides 1–21 are the real plan; 22–33 are leftover template pages (sample nam
 
 - **Couple:** Jeremie Saturay & Michelle Garrote
 - **Date:** Saturday, February 20, 2027
-- **Venue (ceremony + reception):** Lily Vacation Farmhouse, 0060 Companario Street, Sitio Campanario, Pagkalinawan, Jalajala, Rizal
+- **Venue (ceremony + reception):** Lily Vacation Farm House, 0060 Companario Street, Sitio Campanario, Pagkalinawan, Jalajala, Rizal
 - **Schedule:** ceremony 4:30–5:30 PM, cocktail hour 5:30–6:30 PM, reception program 6:30–8:30 PM (slide 2 says ceremony 4:30–5:00; slide 7's fuller schedule used)
 - **Reception moments:** entrance, first dance, speeches, cake cutting
 - **Theme:** Earthy Elegance; greens from sage to deep olive
 - **Venue as hotel:** check-in 2:00 PM, check-out 11:00 AM
 - **Map:** deck's short link is all-caps so its exact spelling is unknown; site uses a Google Maps search link instead
 - **Venue photos:** cropped from slide 4 into `images/venue/`
-- **Not in deck (still placeholders):** entourage names, arrival time, RSVP deadline, phone numbers, other hotels, attire per group, gift registry
+- **Not in deck (still placeholders):** entourage names, RSVP deadline, phone numbers, other hotels, attire per group, gift registry
 
 ## Content
 
