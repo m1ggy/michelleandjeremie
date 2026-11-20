@@ -31,6 +31,7 @@
       --cream: #fcf5ea;
       --ivory: #fffaf3;
       --peach: #efd5bc;
+      --dusty-blue: #5b7389;
 
       --bg: var(--cream);
       --surface: var(--ivory);
@@ -210,7 +211,7 @@
       /* Portrait shot of the couple in front of the trees. On wide screens the
          photo is cropped to a band around their faces with the trees above for
          the names; on portrait screens the whole frame shows. */
-      background: url("images/actual/B528EC89-web.jpg") 50% 52% / cover no-repeat;
+      background: url("images/actual/DSCF3713-web.jpg") 50% 50% / cover no-repeat;
     }
     @media (max-aspect-ratio: 4/5) {
       .hero-bg { background-position: 50% 100%; }
@@ -306,6 +307,7 @@
     }
 
     /* Invitation */
+    .invite .daisy { display: block; width: clamp(64px, 14vw, 96px); height: auto; margin: 0 auto 1.25rem; }
     .invite .script { font-size: clamp(2rem, 6vw, 3rem); }
     .invite .names {
       font-family: var(--serif);
@@ -496,6 +498,7 @@
       font-weight: 400;
       font-size: 1.05rem;
       letter-spacing: 0.18em;
+      color: var(--dusty-blue);
       margin-bottom: 0.5rem;
     }
     .role li {
@@ -754,7 +757,7 @@
         color: var(--ivory);
         background:
           linear-gradient(rgba(50, 55, 39, 0.82), rgba(50, 55, 39, 0.9)),
-          url("images/actual/B528EC89-web.jpg") center 55% / cover no-repeat;
+          url("images/actual/DSCF3713-web.jpg") center 50% / cover no-repeat;
       }
     }
     #wide-gate .gate-card { max-width: 30rem; }
@@ -819,7 +822,14 @@
       display: flex;
       justify-content: center;
       gap: 0.75rem;
-      margin: 1.5rem 0 0;
+      margin: 1rem 0 0;
+    }
+    .swatch-label {
+      margin: 0.75rem 0 1rem;
+      font-family: var(--sans);
+      font-size: 0.7rem;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
     }
     .swatches i {
       width: 40px; height: 40px;
@@ -925,7 +935,7 @@
       .gallery-stage { grid-template-columns: 1fr 1fr; }
     }
   </style>
-  <link rel="preload" as="image" href="images/actual/B528EC89-web.jpg" fetchpriority="high">
+  <link rel="preload" as="image" href="images/actual/DSCF3713-web.jpg" fetchpriority="high">
 </head>
 <body>
 
@@ -969,7 +979,7 @@
   <section id="invitation" class="band-olive invite">
     <div class="narrow">
       <div class="arch"><img src="images/actual/DSCF3405-web.jpg" alt="Michelle with her arms around Jeremie, both smiling" loading="lazy"></div>
-      <p class="eyebrow">Save the date</p>
+      <img class="daisy" src="images/actual/daisy.png" alt="" aria-hidden="true" loading="lazy">
       <p class="lede">Together with our families,<br>we invite you to join the wedding of</p>
       <p class="names">Jeremie &amp; Michelle</p>
       <div class="divider"></div>
@@ -1157,27 +1167,38 @@
     <div class="narrow">
       <h2>Attire Guide</h2>
       <p class="lede">Our theme is Earthy Elegance: soft sages through deep olive greens.</p>
-      <!-- Attire palette, from the design concept deck -->
-      <div class="swatches" role="img" aria-label="Wedding colors: sage green, grass green, deep green, olive green, dark olive">
-        <i style="background: #8cb18f" title="Sage green"></i>
-        <i style="background: #5e9726" title="Grass green"></i>
-        <i style="background: #447a00" title="Deep green"></i>
-        <i style="background: #647c00" title="Olive green"></i>
-        <i style="background: #4d5725" title="Dark olive"></i>
-      </div>
-
       <div class="attire-group">
         <h3>Principal Sponsors</h3>
-        <p class="tbd">Ladies: attire &amp; color. Gentlemen: attire.</p>
+        <div class="swatches" role="img" aria-label="Colors: olive, moss, fern">
+          <i style="background: #708237" title="Olive"></i>
+          <i style="background: #495d23" title="Moss"></i>
+          <i style="background: #4d7943" title="Fern"></i>
+        </div>
+        <p class="swatch-label">Olive &middot; Moss &middot; Fern (dark shades of green)</p>
+        <p>Ladies: long dress in olive, moss, or fern green (dark greens).<br>Gentlemen: formal attire, all-black suit and pants (single-breasted).</p>
       </div>
       <div class="attire-group">
         <h3>Entourage</h3>
-        <p class="tbd">Ladies: attire &amp; color. Gentlemen: attire.</p>
+        <div class="swatches" role="img" aria-label="Colors: sage, pistachio, eucalyptus, matcha, dusty sage">
+          <i style="background: #90b395" title="Sage"></i>
+          <i style="background: #94c573" title="Pistachio"></i>
+          <i style="background: #86ab9a" title="Eucalyptus"></i>
+          <i style="background: #b4c78a" title="Matcha"></i>
+          <i style="background: #6a855a" title="Dusty sage"></i>
+        </div>
+        <p class="swatch-label">Sage &middot; Pistachio &middot; Eucalyptus &middot; Matcha &middot; Dusty sage</p>
+        <p>Bridesmaids, Groomswomen &amp; Maids of Honor: long dress in sage, pistachio, eucalyptus, matcha, or dusty sage green (light greens).<br>Gentlemen: formal attire, all-black suit and pants (single-breasted).</p>
       </div>
       <div class="attire-group">
         <h3>Wedding Guests</h3>
-        <p>Formal or Semi-Formal</p>
-        <p class="tbd">Ladies: attire. Gentlemen: attire.</p>
+        <div class="swatches" role="img" aria-label="Colors: shades of brown">
+          <i style="background: #c9a88a" title="Light brown"></i>
+          <i style="background: #a67a5b" title="Brown"></i>
+          <i style="background: #8a5f3b" title="Dark brown"></i>
+          <i style="background: #4e3222" title="Deep brown"></i>
+        </div>
+        <p class="swatch-label">Shades of brown</p>
+        <p>Formal Attire<br>Ladies: long dress in any shade of brown.<br>Gentlemen: all-black suit and pants (single-breasted).</p>
       </div>
 
       <p class="note">Please refrain from wearing casual clothes, denim pants, slippers, sneakers, and casual shoes. Avoid heavy prints, neon, ivory white or white-colored attire.</p>
